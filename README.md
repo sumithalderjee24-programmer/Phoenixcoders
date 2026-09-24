@@ -16,7 +16,6 @@ This makes it nearly impossible for college authorities to track what's broken, 
 CampusFix fixes this by giving every reported issue a single home: one record, one status, one score that reflects how much it matters.
 
 ## What Students Can Do
-![CampusFix logo](logo.png)
 
 - Report a new issue with its location, category, description, and an optional photo
 - Report an issue by speaking instead of typing, in their preferred language
@@ -99,6 +98,10 @@ Once the issue is fixed, the administrator marks it "Resolved," and the students
 ## Main Objective
 
 CampusFix aims to make campus problem reporting centralized, transparent, trackable, and data-driven — helping students communicate problems effectively, in the language and mode most comfortable to them, and helping authorities resolve them faster and in the right order of priority.
+
+##project UI (using Excalidraw and Micro)
+
+![CampusFix logo]("C:\Users\SUMIT\Downloads\UI design.png")
 
 ## Project Structure
 
