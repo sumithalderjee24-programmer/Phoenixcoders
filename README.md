@@ -101,7 +101,7 @@ CampusFix aims to make campus problem reporting centralized, transparent, tracka
 
 ## Project UI design (using Excalidraw and Micro)
 
-![CampusFix UI Wireframe](C:\Users\SUMIT\Downloads\UI design.png)
+![CampusFix UI Wireframe](Users\SUMIT\Downloads\UI design.png)
 
 ## Project Structure
 
