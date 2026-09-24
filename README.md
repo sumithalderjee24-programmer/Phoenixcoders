@@ -16,6 +16,7 @@ This makes it nearly impossible for college authorities to track what's broken, 
 CampusFix fixes this by giving every reported issue a single home: one record, one status, one score that reflects how much it matters.
 
 ## What Students Can Do
+![CampusFix logo](logo.png)
 
 - Report a new issue with its location, category, description, and an optional photo
 - Report an issue by speaking instead of typing, in their preferred language
