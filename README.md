@@ -99,9 +99,9 @@ Once the issue is fixed, the administrator marks it "Resolved," and the students
 
 CampusFix aims to make campus problem reporting centralized, transparent, trackable, and data-driven — helping students communicate problems effectively, in the language and mode most comfortable to them, and helping authorities resolve them faster and in the right order of priority.
 
-##project UI (using Excalidraw and Micro)
+## Project UI design (using Excalidraw and Micro)
 
-![CampusFix logo](C:\Users\SUMIT\Downloads\UI design.png)
+![CampusFix UI Wireframe](./UI_design.png)
 
 ## Project Structure
 
