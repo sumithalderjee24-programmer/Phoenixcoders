@@ -2,9 +2,7 @@
 
 # CampusFix 🏫🛠️
 
-![Status](https://img.shields.io/badge/status-Kenshi%20prototype-blueviolet)
-![Stack](https://img.shields.io/badge/stack-Flask%20%2B%20SQLite-green)
-![Scope](https://img.shields.io/badge/scope-Campus%20MVP-orange)
+
 
 > CampusFix gives students and campus staff one shared place to report facility problems and see what happens next.
 
