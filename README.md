@@ -101,7 +101,7 @@ CampusFix aims to make campus problem reporting centralized, transparent, tracka
 
 ## Project UI design (using excalidraw and Micro)
 
-![CampusFix UI Wireframe](https://github.com/sumithalderjee24-programmer/Phoenixcoders/blob/220ce0956a5c572ee2c8cf448660bc07361b436e/Ronin.png)
+![CampusFix UI Wireframe](https://github.com/sumithalderjee24-programmer/Phoenixcoders/blob/a0f010cc1e4eed0de9b4ab85740cab2a3e91345f/UI_sketch.png)
 
 
 ## Project Structure
