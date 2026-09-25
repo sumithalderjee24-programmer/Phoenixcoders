@@ -67,13 +67,7 @@ The Kenshi prototype ships as **eight static HTML/CSS screens** — hand-built, 
 
 Excalidraw link: [Open CampusFix Wireframe & User Flow](https://excalidraw.com/#json=2hNRhurUrBRqPz6XRNDm6,zKtMzOvJWDUiKptXIa54ag)
 
-<details>
-<summary><strong>Flow at a glance</strong> (click to expand)</summary>
 
-
-
-**Scope:** Kenshi = static HTML/CSS prototype. No Flask, no SQLite, no real auth, no real upvoting.
-</details>
 
 ---
 
