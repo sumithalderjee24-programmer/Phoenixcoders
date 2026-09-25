@@ -62,7 +62,7 @@ The Kenshi prototype ships as **eight static HTML/CSS screens** — hand-built, 
 | **K7** — `admin_dashboard.html` | Totals (open / in progress / resolved), a "high-impact" alert, and a sortable, filterable issue table |
 | **K8** — `admin_issue_detail.html` | Same detail view as K4, plus admin controls: update status and add an optional remark |
 
-Live board: [Open CampusFix Wireframe & User Flow](https://excalidraw.com/#json=2hNRhurUrBRqPz6XRNDm6,zKtMzOvJWDUiKptXIa54ag)
+Excalidraw link: [Open CampusFix Wireframe & User Flow](https://excalidraw.com/#json=2hNRhurUrBRqPz6XRNDm6,zKtMzOvJWDUiKptXIa54ag)
 
 <details>
 <summary><strong>Flow at a glance</strong> (click to expand)</summary>
