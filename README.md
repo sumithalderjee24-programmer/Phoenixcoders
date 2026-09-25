@@ -11,12 +11,12 @@
 ---
 
 ### Contents
-[Why we're building this](#why-were-building-this) ·
-[Project Documentation](#project-documentation) · 
-[Wireframe & Screen Flow](#wireframe--screen-flow) · 
-[Tech Stack](#tech-stack) ·
-[What I'm Building Toward](#what-im-building-toward) · 
-[Next Up](#next-up-sprint-1)
+- [Why we're building this](#why-were-building-this) ·
+- [Project Documentation](#project-documentation) · 
+- [Wireframe & Screen Flow](#wireframe--screen-flow) · 
+- [Tech Stack](#tech-stack) ·
+- [What I'm Building Toward](#what-im-building-toward) · 
+- [Next Up](#next-up-sprint-1)
 
 ---
 
