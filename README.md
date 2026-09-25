@@ -33,11 +33,11 @@ CampusFix fixes this with one shared, searchable queue. Students report an issue
 
 ## Project Documentation
 
-- [**PRD.md**](./Docs/PRD.md) — Problem breakdown, target persona (college student), MVP scope, and test metrics.
-- [**ARCHITECTURE.md**](./Docs/ARCHITECTURE.md) — System flow, component diagram, tech choices, and DB schema.
-- [**API_SPEC.md**](./Docs/API_SPEC.md) — Backend endpoints, auth flow, and error payloads.
-- [**REQUIREMENTS.md**](./Docs/REQUIREMENTS.md) — Functional specs (FR-01 to FR-15), performance targets, and constraints.
-- [**ROADMAP.md**](./Docs/ROADMAP.md) — 8-week breakdown across Kenshi (MVP), Samurai, and Shogun milestones.
+- [**PRD.md**](./Docx/PRD.md) — Problem breakdown, target persona (college student), MVP scope, and test metrics.
+- [**ARCHITECTURE.md**](./Docx/ARCHITECTURE.md) — System flow, component diagram, tech choices, and DB schema.
+- [**API_SPEC.md**](./Docx/API_SPEC.md) — Backend endpoints, auth flow, and error payloads.
+- [**REQUIREMENTS.md**](./Docx/REQUIREMENTS.md) — Functional specs (FR-01 to FR-15), performance targets, and constraints.
+- [**ROADMAP.md**](./Docx/ROADMAP.md) — 8-week breakdown across Kenshi (MVP), Samurai, and Shogun milestones.
 
 ---
 
