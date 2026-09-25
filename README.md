@@ -70,21 +70,7 @@ Excalidraw link: [Open CampusFix Wireframe & User Flow](https://excalidraw.com/#
 <details>
 <summary><strong>Flow at a glance</strong> (click to expand)</summary>
 
-```mermaid
-flowchart LR
-    K1[K1 Login] -->|Create account| K2[K2 Register]
-    K2 -->|Redirect| K1
-    K1 -->|Student login| K3[K3 Issue Listing]
-    K3 -->|View issue| K4[K4 Issue Detail]
-    K4 -->|Back| K3
-    K3 -->|Report an issue| K5[K5 Report Issue]
-    K5 -->|Submit| K4
-    K3 -->|Profile| K6[K6 Student Profile]
-    K6 -->|View issue| K4
-    K1 -.Admin login.-> K7[K7 Admin Dashboard]
-    K7 -->|Open issue| K8[K8 Admin Issue Detail]
-    K8 -->|Update status| K7
-```
+
 
 **Scope:** Kenshi = static HTML/CSS prototype. No Flask, no SQLite, no real auth, no real upvoting.
 </details>
