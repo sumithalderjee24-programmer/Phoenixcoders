@@ -79,7 +79,7 @@ Excalidraw link: [Open CampusFix Wireframe & User Flow](https://excalidraw.com/#
 | Backend  | Python 3.x + Flask | Specified in the PRD; lightweight, well-documented, and beginner-friendly |
 | Database | SQLite (single `.db` file) | Zero-config, file-based, and sufficient for ≤ 100 concurrent users at MVP scale |
 | Auth     | Flask-Login | Manages sessions, `current_user`, and `@login_required` |
-| Hosting | Local machine -> then deployed to a public host (e.g. PythonAnywhere/Render) | Matches the PRD deployment target — build and test locally first, then ship live for the Shogun pilot |
+| Hosting | Local machine -> then deployed to a public host. | Matches the PRD deployment target — build and test locally first, then ship live for the Shogun pilot |
 
 ---
 
