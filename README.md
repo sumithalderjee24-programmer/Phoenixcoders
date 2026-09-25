@@ -33,11 +33,11 @@ CampusFix fixes this with one shared, searchable queue. Students report an issue
 
 ## Project Documentation
 
-- [**PRD.md**](./Docx/PRD.md) — Problem breakdown, target persona (college student), MVP scope, and test metrics.
-- [**ARCHITECTURE.md**](./Docx/ARCHITECTURE.md) — System flow, component diagram, tech choices, and DB schema.
-- [**API_SPEC.md**](./Docx/API_SPEC.md) — Backend endpoints, auth flow, and error payloads.
-- [**REQUIREMENTS.md**](./Docx/REQUIREMENTS.md) — Functional specs (FR-01 to FR-15), performance targets, and constraints.
-- [**ROADMAP.md**](./Docx/ROADMAP.md) — 8-week breakdown across Kenshi (MVP), Samurai, and Shogun milestones.
+- [**PRD.md**](./docs/PRD.md) — Problem breakdown, target persona (college student), MVP scope, and test metrics.
+- [**ARCHITECTURE.md**](./docs/ARCHITECTURE.md) — System flow, component diagram, tech choices, and DB schema.
+- [**API_SPEC.md**](./docs/API_SPEC.md) — Backend endpoints, auth flow, and error payloads.
+- [**REQUIREMENTS.md**](./docs/REQUIREMENTS.md) — Functional specs (FR-01 to FR-15), performance targets, and constraints.
+- [**ROADMAP.md**](./docs/ROADMAP.md) — 8-week breakdown across Kenshi (MVP), Samurai, and Shogun milestones.
 
 ---
 
@@ -45,7 +45,7 @@ CampusFix fixes this with one shared, searchable queue. Students report an issue
 
 The Kenshi prototype ships as **eight static HTML/CSS screens** — hand-built, hardcoded data, no backend behind any of it yet — split across a student flow and an admin flow.
 
-![CampusFix Wireframe & User Flow](https://github.com/sumithalderjee24-programmer/Phoenixcoders/blob/a4ad0dd3b673ae143cfd10b600cb3e9862a6b407/UI_SKETCH.png)
+![CampusFix Wireframe & User Flow](https://github.com/sumithalderjee24-programmer/Phoenixcoders/blob/bf72dae43fbac5bdef0f06703f1ca30ac4c86137/docs/sketch.png)
 
 **Student flow**
 
