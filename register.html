@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - CampusFix</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body class="bg-surface">
+  <div class="auth-layout" x-data="{ showPassword: false, pwd: '' }">
+    
+    <!-- Brand Panel (Desktop only) -->
+    <div class="auth-panel-left">
+      <div class="auth-bg-shapes">
+        <div class="auth-shape auth-shape-1"></div>
+        <div class="auth-shape auth-shape-2"></div>
+      </div>
+      
+      <div class="auth-content h-full flex flex-col justify-between">
+        <div class="nav-brand text-2xl mb-8"><i class="ph-fill ph-wrench text-accent"></i> CampusFix</div>
+        
+        <div>
+          <h1 class="text-4xl md:text-5xl font-bold mb-4">Every issue.<br>Tracked. Resolved.</h1>
+          <p class="text-lg text-gray-400 mb-12 max-w-md">The transparent accountability system for campus infrastructure. No more ignored complaint registers.</p>
+          
+          <div class="flex flex-col gap-6">
+            <div class="flex items-start gap-4">
+              <div class="bg-white/10 p-3 rounded-lg"><i class="ph-bold ph-sort-descending text-xl"></i></div>
+              <div>
+                <h3 class="text-base font-bold mb-1">Ranked by impact</h3>
+                <p class="text-sm text-gray-400">Issues are prioritised by community votes, severity, and time waiting.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="bg-white/10 p-3 rounded-lg"><i class="ph-bold ph-copy text-xl"></i></div>
+              <div>
+                <h3 class="text-base font-bold mb-1">Duplicates caught early</h3>
+                <p class="text-sm text-gray-400">Smart matching guides students to support existing issues instead of filing new ones.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="bg-white/10 p-3 rounded-lg"><i class="ph-bold ph-eye text-xl"></i></div>
+              <div>
+                <h3 class="text-base font-bold mb-1">Every status public</h3>
+                <p class="text-sm text-gray-400">Full visibility into who reported what, and when the admin last responded.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="text-xs text-gray-500 mt-8">&copy; 2026 CampusFix</div>
+      </div>
+    </div>
+
+    <!-- Register Form -->
+    <div class="auth-panel-right">
+      <div class="w-full">
+        <!-- Mobile header -->
+        <div class="md:hidden flex items-center gap-2 font-heading font-bold text-xl mb-8 text-ink">
+          <i class="ph-fill ph-wrench text-accent"></i> CampusFix
+        </div>
+
+        <h2 class="mb-2">Create account</h2>
+        <p class="text-muted mb-8">Join your campus community to report and track issues.</p>
+
+        <form @submit.prevent="window.location.href='login.html#registered'" class="flex flex-col gap-5">
+          
+          <div class="form-group mb-0">
+            <label class="form-label">Full Name</label>
+            <input type="text" required minlength="2" maxlength="100" class="form-input" placeholder="Riya Banerjee">
+          </div>
+
+          <div class="form-group mb-0">
+            <label class="form-label">University Email</label>
+            <input type="email" required maxlength="200" class="form-input" placeholder="student@university.edu">
+          </div>
+
+          <div class="form-group mb-0 relative">
+            <label class="form-label">Password <span class="text-muted font-mono" x-text="pwd.length > 0 ? pwd.length : ''"></span></label>
+            <div class="relative">
+              <input :type="showPassword ? 'text' : 'password'" x-model="pwd" required minlength="8" maxlength="128" class="form-input" placeholder="Min 8 characters" style="padding-right: 40px;">
+              <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-ink" @click="showPassword = !showPassword" aria-label="Toggle password visibility">
+                <i class="ph" :class="showPassword ? 'ph-eye-slash' : 'ph-eye'"></i>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-full py-3 mt-4 text-base">Create Account</button>
+        </form>
+
+        <div class="mt-8 text-center text-sm">
+          <span class="text-muted">Already have an account?</span> <a href="login.html" class="font-bold text-accent hover:underline">Log in</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

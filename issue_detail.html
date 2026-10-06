@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Issue Details - CampusFix</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <script src="js/app.js"></script>
+</head>
+<body x-data="issueDetail(new URLSearchParams(window.location.search).get('id') || 2)">
+
+  <nav class="navbar">
+    <div class="container nav-content">
+      <a href="index.html" class="nav-brand"><i class="ph-fill ph-wrench"></i> CampusFix</a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Browse</a>
+        <a href="report_issue.html" class="nav-link">Report an issue</a>
+        <a href="profile.html" class="nav-link">Profile</a>
+        <a href="login.html" class="nav-link">Log out</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container py-4" x-show="issue" style="display: none;">
+    <a href="index.html" class="inline-flex items-center gap-2 text-muted hover:text-ink mb-6 font-medium">
+      <i class="ph-bold ph-arrow-left"></i> Back to feed
+    </a>
+
+    <div class="grid lg:grid-cols-12 gap-8">
+      
+      <!-- Main Content -->
+      <div class="lg:col-span-8 flex-col gap-6">
+        
+        <div class="card-meta mb-4">
+          <span class="badge" :class="{'badge-status-open': issue.status==='Open', 'badge-status-progress': issue.status==='In Progress', 'badge-status-resolved': issue.status==='Resolved'}" x-text="issue.status"></span>
+          <span class="badge" :class="{'badge-sev-low': issue.severity==='Low', 'badge-sev-med': issue.severity==='Medium', 'badge-sev-high': issue.severity==='High'}">
+            <i class="ph" :class="{'ph-cell-signal-low': issue.severity==='Low', 'ph-cell-signal-medium': issue.severity==='Medium', 'ph-cell-signal-full': issue.severity==='High'}"></i>
+            <span x-text="issue.severity"></span>
+          </span>
+          <span class="badge badge-outline" x-text="issue.category"></span>
+        </div>
+
+        <h1 class="mb-2" x-text="issue.title"></h1>
+        
+        <div class="flex flex-wrap gap-4 text-sm text-muted mb-6">
+          <div class="flex items-center gap-1"><i class="ph-fill ph-map-pin"></i> <span x-text="issue.location"></span></div>
+          <div class="flex items-center gap-1"><i class="ph-fill ph-user"></i> <span x-text="issue.reportedBy"></span></div>
+          <div class="flex items-center gap-1"><i class="ph-fill ph-calendar"></i> Reported <span x-text="new Date(issue.reportedAt).toLocaleDateString()"></span></div>
+        </div>
+
+        <!-- Accountability Strip -->
+        <div class="acc-strip">
+          <div class="acc-step">
+            <span class="acc-step-label">Reported</span>
+            <span class="acc-step-val text-ink" x-text="new Date(issue.reportedAt).toLocaleDateString('en-GB', {day:'numeric', month:'short'})"></span>
+          </div>
+          <i class="ph-bold ph-caret-right acc-divider"></i>
+          
+          <div class="acc-step" :class="{'muted': issue.status === 'Open'}">
+            <span class="acc-step-label">First Response</span>
+            <span class="acc-step-val" x-show="issue.status !== 'Open'" x-text="issue.status === 'Resolved' ? 'Responded' : 'In Progress'"></span>
+            <span class="acc-step-val text-muted" x-show="issue.status === 'Open'">Awaiting</span>
+          </div>
+          <i class="ph-bold ph-caret-right acc-divider"></i>
+          
+          <div class="acc-step" :class="{'muted': issue.status !== 'Resolved'}">
+            <span class="acc-step-label">Resolution</span>
+            <span class="acc-step-val text-status-resolved" x-show="issue.status === 'Resolved'" x-text="issue.resolvedAt ? new Date(issue.resolvedAt).toLocaleDateString('en-GB', {day:'numeric', month:'short'}) : 'Resolved'"></span>
+            <span class="acc-step-val text-muted" x-show="issue.status !== 'Resolved'">Pending</span>
+          </div>
+        </div>
+
+        <div class="bg-surface p-6 rounded-lg border border-border mb-8">
+          <h3 class="mb-4 text-base font-bold text-ink">Description</h3>
+          <p class="text-ink whitespace-pre-wrap" x-text="issue.desc"></p>
+          
+          <div class="mt-6 image-placeholder">
+            <i class="ph ph-image text-3xl"></i>
+            <span class="text-sm">No image provided</span>
+          </div>
+        </div>
+
+        <div class="mb-8">
+          <h2 class="mb-6">Resolution Timeline</h2>
+          <div class="timeline">
+            <!-- First Entry -->
+            <div class="timeline-item">
+              <div class="timeline-icon text-muted"><i class="ph-fill ph-flag"></i></div>
+              <div class="timeline-content">
+                <div class="timeline-header">
+                  <span class="font-bold text-sm">Issue Reported</span>
+                  <span class="timeline-date" x-text="new Date(issue.reportedAt).toLocaleDateString()"></span>
+                </div>
+                <div class="text-sm text-muted">by <span x-text="issue.reportedBy"></span></div>
+              </div>
+            </div>
+            
+            <!-- Mock Admin Response for issue #2 and #4 and #6 -->
+            <template x-if="issue.id === 2 || issue.id === 4 || issue.id === 6">
+              <div class="timeline-item status-progress">
+                <div class="timeline-icon"><i class="ph-fill ph-wrench"></i></div>
+                <div class="timeline-content">
+                  <div class="timeline-header">
+                    <span class="badge badge-status-progress">In Progress</span>
+                    <span class="timeline-date">28 Sep 2026</span>
+                  </div>
+                  <div class="timeline-body mt-2">
+                    <div class="font-bold text-sm mb-1 text-ink">Facilities Office</div>
+                    We have acknowledged the issue and dispatched a technician to investigate.
+                  </div>
+                </div>
+              </div>
+            </template>
+            
+            <!-- Mock Resolved for issue #6 -->
+            <template x-if="issue.id === 6">
+              <div class="timeline-item status-resolved">
+                <div class="timeline-icon"><i class="ph-fill ph-check-circle"></i></div>
+                <div class="timeline-content">
+                  <div class="timeline-header">
+                    <span class="badge badge-status-resolved">Resolved</span>
+                    <span class="timeline-date" x-text="new Date(issue.resolvedAt).toLocaleDateString()"></span>
+                  </div>
+                  <div class="timeline-body mt-2">
+                    <div class="font-bold text-sm mb-1 text-ink">Facilities Office</div>
+                    The plumber has fixed the leak and replaced the valve. Area cleaned.
+                  </div>
+                </div>
+              </div>
+            </template>
+            
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Aside -->
+      <aside class="lg:col-span-4 flex-col gap-6" style="position: sticky; top: 88px; height: max-content;">
+        
+        <!-- Support Card -->
+        <div class="bg-surface p-6 rounded-lg border border-border text-center shadow-sm mb-6">
+          <div class="text-4xl font-mono font-bold text-ink mb-1 animate-fade-in" x-text="issue.upvotes"></div>
+          <div class="text-sm text-muted font-medium mb-5 uppercase tracking-wide">Students Affected</div>
+          
+          <template x-if="!isOwn && issue.status !== 'Resolved'">
+            <button class="btn w-full justify-center text-base py-3" 
+                    :class="supported ? 'btn-primary bg-accent hover:bg-accent-hover text-white' : 'btn-secondary'" 
+                    @click="toggleSupport">
+              <i class="ph-bold" :class="supported ? 'ph-check' : 'ph-thumbs-up'"></i>
+              <span x-text="supported ? 'Supported' : 'Support this issue'"></span>
+            </button>
+          </template>
+          
+          <template x-if="isOwn">
+            <div class="text-sm text-muted p-2 bg-bg rounded">You reported this issue</div>
+          </template>
+          
+          <template x-if="!isOwn && issue.status === 'Resolved'">
+            <div class="text-sm text-status-resolved font-bold p-2 bg-status-resolved-bg rounded">Issue is resolved</div>
+          </template>
+        </div>
+
+        <!-- Score Chart Panel -->
+        <div class="bg-surface p-6 rounded-lg border border-border shadow-sm">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-base font-bold">Impact Score</h3>
+            <div class="score-chip text-lg px-3 py-1" :class="`score-tier-${issue.tier}`">
+              <span x-text="issue.score"></span>
+            </div>
+          </div>
+          
+          <p class="text-sm text-muted mb-4">This score determines priority. It updates live based on community support and time waiting.</p>
+          
+          <div style="height: 120px; width: 100%;">
+            <canvas id="scoreChart"></canvas>
+          </div>
+          
+          <div class="mt-4 p-3 bg-bg rounded text-xs text-muted font-mono leading-relaxed">
+            <div x-text="`${issue.upvotes} upvotes x 3 = ${issue.upvotes * 3}`"></div>
+            <div x-text="`+ ${issue.severity} severity x 5 = ${{Low:5, Medium:10, High:15}[issue.severity]}`"></div>
+            <div x-text="`+ ${Math.min(issue.daysOpen, 30)} days open = ${Math.min(issue.daysOpen, 30)}`"></div>
+            <div class="mt-1 font-bold text-ink" x-text="`Total Score = ${issue.score}`"></div>
+            <div x-show="issue.daysOpen >= 30" class="text-status-open-text mt-1">Note: Time component capped at 30 days.</div>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+  </main>
+  
+  <div x-data="toastManager" class="toast-container">
+    <template x-for="toast in toasts" :key="toast.id">
+      <div class="toast animate-fade-in">
+        <i class="ph-fill ph-check-circle text-accent"></i>
+        <span x-text="toast.msg"></span>
+      </div>
+    </template>
+  </div>
+
+</body>
+</html>
