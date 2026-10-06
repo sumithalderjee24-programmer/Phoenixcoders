@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report Issue - CampusFix</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="js/app.js"></script>
+</head>
+<body x-data="reportForm">
+
+  <nav class="navbar">
+    <div class="container nav-content">
+      <a href="index.html" class="nav-brand"><i class="ph-fill ph-wrench"></i> CampusFix</a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Browse</a>
+        <a href="report_issue.html" class="nav-link" aria-current="page">Report an issue</a>
+        <a href="profile.html" class="nav-link">Profile</a>
+        <a href="login.html" class="nav-link">Log out</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container py-4">
+    <div class="grid lg:grid-cols-12 gap-8">
+      
+      <!-- Form Area -->
+      <div class="lg:col-span-7 lg:col-start-2">
+        <h1 class="mb-6">Report a campus issue</h1>
+        
+        <form class="bg-surface p-6 md:p-8 rounded-lg border border-border shadow-sm mb-8" @submit.prevent="submitForm" novalidate>
+          
+          <div class="form-group" :class="{'has-error': submitted && errors.title}">
+            <label class="form-label">Issue Title *</label>
+            <input type="text" x-model="title" @input.debounce.500ms="checkDuplicates" class="form-input" placeholder="E.g., Ceiling fans not working in Room 204">
+            <div class="form-hint" x-show="!(submitted && errors.title)">Be specific. Max 120 chars.</div>
+            <div class="form-error-msg" x-show="submitted && errors.title" x-text="errors.title"></div>
+          </div>
+
+          <div class="form-group" :class="{'has-error': submitted && errors.category}">
+            <label class="form-label">Category *</label>
+            <select x-model="category" @change="checkDuplicates" class="form-select">
+              <option value="" disabled selected>Select category</option>
+              <option>Electrical</option><option>Plumbing</option><option>Furniture</option>
+              <option>Wi-Fi</option><option>Washroom</option><option>Lab Equipment</option>
+              <option>Hostel</option><option>Other</option>
+            </select>
+            <div class="form-error-msg" x-show="submitted && errors.category" x-text="errors.category"></div>
+          </div>
+
+          <div class="form-group" :class="{'has-error': submitted && errors.location}">
+            <label class="form-label">Location *</label>
+            <input type="text" x-model="location" class="form-input" placeholder="Building, Room, Floor">
+            <div class="form-error-msg" x-show="submitted && errors.location" x-text="errors.location"></div>
+          </div>
+
+          <div class="form-group" :class="{'has-error': submitted && errors.severity}">
+            <label class="form-label">Severity *</label>
+            <div class="segmented-control mt-1">
+              <label class="segment-label">
+                <input type="radio" name="severity" value="Low" x-model="severity" class="segment-input">
+                <span class="segment-text">Low <span class="segment-desc">Minor inconvenience</span></span>
+              </label>
+              <label class="segment-label">
+                <input type="radio" name="severity" value="Medium" x-model="severity" class="segment-input">
+                <span class="segment-text">Medium <span class="segment-desc">Affects work/study</span></span>
+              </label>
+              <label class="segment-label">
+                <input type="radio" name="severity" value="High" x-model="severity" class="segment-input">
+                <span class="segment-text">High <span class="segment-desc">Urgent / Safety risk</span></span>
+              </label>
+            </div>
+            <div class="form-error-msg mt-2" x-show="submitted && errors.severity" x-text="errors.severity"></div>
+          </div>
+
+          <div class="form-group" :class="{'has-error': submitted && errors.desc}">
+            <label class="form-label">Description * <span class="text-muted font-mono" x-text="`${desc.length}/2000`"></span></label>
+            <textarea x-model="desc" class="form-textarea" placeholder="Provide details. What exactly is broken?"></textarea>
+            <div class="form-error-msg" x-show="submitted && errors.desc" x-text="errors.desc"></div>
+          </div>
+
+          <div class="form-group" :class="{'has-error': imageError}">
+            <label class="form-label">Photo <span class="optional">Optional, max 2 MB</span></label>
+            
+            <div class="upload-zone" 
+                 :class="{'dragover': isDragging}"
+                 @dragover.prevent="isDragging = true" 
+                 @dragleave.prevent="isDragging = false" 
+                 @drop.prevent="isDragging = false; handleFile($event)">
+                 
+              <input type="file" accept="image/jpeg, image/png, image/webp" class="upload-input" @change="handleFile($event)">
+              
+              <div x-show="!imagePreview">
+                <i class="ph ph-upload-simple text-3xl text-muted mb-2"></i>
+                <div class="text-sm font-medium">Click or drag image here</div>
+                <div class="text-xs text-muted mt-1">JPG, PNG, WEBP only</div>
+              </div>
+              
+              <div x-show="imagePreview" style="display: none;">
+                <img :src="imagePreview" alt="Preview" class="max-h-48 mx-auto rounded">
+                <div class="text-sm text-accent mt-2 font-medium">Click to replace</div>
+              </div>
+            </div>
+            <div class="form-error-msg mt-1" x-show="imageError" x-text="imageError"></div>
+          </div>
+
+          <div class="mt-8 border-t border-border pt-6 flex justify-end gap-4">
+            <button type="button" class="btn btn-ghost" onclick="window.history.back()">Cancel</button>
+            <button type="submit" class="btn btn-primary px-8">Submit Report</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Aside: Duplicates & Preview -->
+      <div class="lg:col-span-4 flex-col gap-6">
+        
+        <!-- Duplicate Matcher (Differentiator) -->
+        <div class="bg-accent-soft p-5 rounded-lg border border-accent relative" x-show="title.length > 4 && !dismissed" style="display: none;" aria-live="polite">
+          
+          <button type="button" @click="dismissed = true" class="absolute top-2 right-2 text-accent p-1 hover:bg-white rounded"><i class="ph ph-x"></i></button>
+          
+          <h3 class="text-accent text-sm font-bold uppercase tracking-wide flex items-center gap-2 mb-3">
+            <i class="ph-bold ph-magnifying-glass"></i> Similar Issues
+          </h3>
+          
+          <div x-show="matches.length === 0" class="text-sm text-ink">
+            No similar issues found. You're the first to report this!
+          </div>
+
+          <div x-show="matches.length > 0" class="flex-col gap-3">
+            <p class="text-sm text-ink mb-2">Before reporting, check if someone already reported this. Supporting an existing issue gives it higher priority.</p>
+            
+            <template x-for="m in matches">
+              <div class="bg-surface border border-border p-3 rounded-md shadow-sm text-sm">
+                <div class="font-bold text-ink mb-1 truncate" x-text="m.title"></div>
+                <div class="flex items-center justify-between text-muted text-xs mb-3">
+                  <span><i class="ph-fill ph-thumbs-up"></i> <span x-text="m.upvotes"></span> supporters</span>
+                  <span class="badge" :class="{'badge-status-open': m.status==='Open', 'badge-status-progress': m.status==='In Progress', 'badge-status-resolved': m.status==='Resolved'}" x-text="m.status"></span>
+                </div>
+                <a :href="`issue_detail.html?id=${m.id}`" class="btn btn-primary py-1 px-3 w-full text-xs">Support this one instead</a>
+              </div>
+            </template>
+            
+            <button type="button" @click="dismissed = true" class="btn btn-ghost text-xs w-full mt-1 text-muted">Mine is different, continue</button>
+          </div>
+        </div>
+
+        <!-- Live Preview -->
+        <div>
+          <h4 class="text-sm font-bold text-muted uppercase tracking-wide mb-3">Live Feed Preview</h4>
+          <div class="issue-card scale-95 origin-top-left" style="pointer-events: none;">
+            <div class="card-header">
+              <h3 class="card-title text-base" x-text="title || 'Your title here'"></h3>
+            </div>
+            <div class="card-meta">
+              <span class="badge badge-status-open">Open</span>
+              <span class="badge" :class="{
+                'badge-sev-low': severity==='Low',
+                'badge-sev-med': severity==='Medium',
+                'badge-sev-high': severity==='High'
+              }" x-show="severity">
+                <i class="ph ph-cell-signal-full"></i>
+                <span x-text="severity"></span>
+              </span>
+              <span class="badge badge-outline" x-show="category" x-text="category"></span>
+            </div>
+            <div class="card-location mt-1" x-show="location"><i class="ph-fill ph-map-pin"></i> <span x-text="location"></span></div>
+            <div class="card-desc mt-2" x-text="desc || 'Description will appear here...' "></div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+</body>
+</html>

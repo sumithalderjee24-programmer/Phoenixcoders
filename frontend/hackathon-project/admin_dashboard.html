@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - CampusFix</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="js/app.js"></script>
+</head>
+<body x-data="adminDash">
+
+  <!-- Admin Navbar -->
+  <nav class="navbar admin-nav" x-data="{ mobileMenuOpen: false }">
+    <div class="container nav-content">
+      <div class="nav-brand">
+        <i class="ph-fill ph-wrench text-admin-accent"></i> 
+        ADMIN <span class="text-muted font-normal mx-2">|</span> CampusFix
+      </div>
+      <div class="nav-links">
+        <a href="admin_dashboard.html" class="nav-link" aria-current="page">Dashboard</a>
+        <a href="login.html" class="nav-link">Log out</a>
+      </div>
+      <button class="hamburger" @click="mobileMenuOpen = !mobileMenuOpen" aria-label="Toggle menu">
+        <i class="ph ph-list"></i>
+      </button>
+    </div>
+    <div class="mobile-menu" x-show="mobileMenuOpen" style="display: none;">
+      <div class="flex justify-between items-center mb-4">
+        <div class="nav-brand"><i class="ph-fill ph-wrench text-admin-accent"></i> ADMIN</div>
+        <button class="hamburger" @click="mobileMenuOpen = false"><i class="ph ph-x"></i></button>
+      </div>
+      <a href="admin_dashboard.html" class="nav-link font-bold text-surface">Dashboard</a>
+      <a href="login.html" class="nav-link text-muted mt-8">Log out</a>
+    </div>
+  </nav>
+
+  <main class="container py-4">
+    
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+      <div>
+        <h1 class="mb-1">Facilities Triage</h1>
+        <p class="text-muted">Prioritise and resolve campus issues based on impact score.</p>
+      </div>
+      <div class="flex gap-4">
+        <div class="bg-surface px-4 py-2 rounded border border-border text-center">
+          <div class="text-2xl font-mono font-bold text-ink" x-text="stats.open"></div>
+          <div class="text-xs text-muted uppercase tracking-wide font-bold">Open</div>
+        </div>
+        <div class="bg-surface px-4 py-2 rounded border border-border text-center">
+          <div class="text-2xl font-mono font-bold text-ink" x-text="stats.prog"></div>
+          <div class="text-xs text-muted uppercase tracking-wide font-bold">In Prog</div>
+        </div>
+        <div class="bg-surface px-4 py-2 rounded border border-border text-center">
+          <div class="text-2xl font-mono font-bold text-ink" x-text="stats.res"></div>
+          <div class="text-xs text-muted uppercase tracking-wide font-bold">Resolved</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alert Banner -->
+    <div class="bg-severity-high-bg border border-tier-critical rounded-lg p-4 mb-6 flex items-start gap-3" x-show="stats.highAlerts > 0">
+      <i class="ph-fill ph-warning-circle text-tier-critical text-2xl mt-1"></i>
+      <div>
+        <h4 class="text-tier-critical font-bold">High-impact alerts</h4>
+        <p class="text-sm text-tier-critical">There are <span x-text="stats.highAlerts"></span> issues with a critical impact score (>60) that require immediate attention.</p>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-bar mb-6">
+      <div class="text-sm font-bold text-ink mr-2"><i class="ph-bold ph-funnel"></i> Filters:</div>
+      <select x-model="filterCategory" class="filter-select">
+        <option value="">All Categories</option>
+        <option>Electrical</option><option>Wi-Fi</option><option>Washroom</option><option>Lab Equipment</option><option>Furniture</option><option>Plumbing</option>
+      </select>
+      <select x-model="filterStatus" class="filter-select">
+        <option value="">All Statuses</option>
+        <option>Open</option><option>In Progress</option><option>Resolved</option>
+      </select>
+      <select x-model="filterSeverity" class="filter-select">
+        <option value="">All Severities</option>
+        <option>Low</option><option>Medium</option><option>High</option>
+      </select>
+    </div>
+
+    <!-- Triage Table -->
+    <div class="bg-surface rounded-lg border border-border overflow-x-auto shadow-sm">
+      <table class="admin-table w-full">
+        <thead>
+          <tr>
+            <th style="width: 60px;">Rank</th>
+            <th>Issue Title & Location</th>
+            <th>Impact Score</th>
+            <th>Category / Sev</th>
+            <th>Status</th>
+            <th>Accountability</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template x-for="(issue, index) in filtered" :key="issue.id">
+            <tr @click="window.location.href = `admin_issue_detail.html?id=${issue.id}`" tabindex="0">
+              <td data-label="Rank" class="font-mono text-muted font-bold text-center">#<span x-text="index + 1"></span></td>
+              
+              <td data-label="Issue">
+                <div class="font-medium text-ink mb-1" x-text="issue.title"></div>
+                <div class="text-xs text-muted"><i class="ph-fill ph-map-pin"></i> <span x-text="issue.location"></span> &bull; <span x-text="issue.upvotes"></span> supporters</div>
+              </td>
+              
+              <td data-label="Impact Score">
+                <div class="flex items-center gap-2">
+                  <div class="font-mono font-bold" :class="`text-tier-${issue.tier}`" x-text="issue.score"></div>
+                  <div class="urgency-bar"><div class="urgency-fill" :class="`bg-tier-${issue.tier}`" :style="`width: ${issue.score}%`"></div></div>
+                </div>
+              </td>
+              
+              <td data-label="Category / Sev">
+                <div class="flex gap-1 flex-wrap">
+                  <span class="badge badge-outline" x-text="issue.category"></span>
+                  <span class="badge" :class="{'badge-sev-low': issue.severity==='Low', 'badge-sev-med': issue.severity==='Medium', 'badge-sev-high': issue.severity==='High'}" x-text="issue.severity"></span>
+                </div>
+              </td>
+              
+              <td data-label="Status">
+                <span class="badge" :class="{'badge-status-open': issue.status==='Open', 'badge-status-progress': issue.status==='In Progress', 'badge-status-resolved': issue.status==='Resolved'}" x-text="issue.status"></span>
+              </td>
+              
+              <td data-label="Accountability">
+                <div class="text-sm">
+                  <span x-show="issue.status !== 'Resolved'">Wait: <span class="font-bold" x-text="issue.daysOpen"></span> days</span>
+                  <span x-show="issue.status === 'Resolved'" class="text-muted">Done</span>
+                  <span x-show="isOverdue(issue)" class="overdue-chip ml-2">Overdue</span>
+                </div>
+              </td>
+            </tr>
+          </template>
+          <tr x-show="filtered.length === 0">
+            <td colspan="6" class="text-center py-8 text-muted">No issues match the selected filters.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+</body>
+</html>

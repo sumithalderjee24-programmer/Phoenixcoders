@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile - CampusFix</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="js/app.js"></script>
+</head>
+<body>
+
+  <nav class="navbar" x-data="{ mobileMenuOpen: false }">
+    <div class="container nav-content">
+      <a href="index.html" class="nav-brand"><i class="ph-fill ph-wrench"></i> CampusFix</a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Browse</a>
+        <a href="report_issue.html" class="nav-link">Report an issue</a>
+        <a href="profile.html" class="nav-link" aria-current="page">Profile</a>
+        <a href="login.html" class="nav-link">Log out</a>
+      </div>
+      <button class="hamburger" @click="mobileMenuOpen = !mobileMenuOpen" aria-label="Toggle menu">
+        <i class="ph ph-list"></i>
+      </button>
+    </div>
+    <div class="mobile-menu" x-show="mobileMenuOpen" style="display: none;">
+      <div class="flex justify-between items-center mb-4">
+        <div class="nav-brand"><i class="ph-fill ph-wrench"></i> CampusFix</div>
+        <button class="hamburger" @click="mobileMenuOpen = false"><i class="ph ph-x"></i></button>
+      </div>
+      <a href="index.html" class="nav-link">Browse</a>
+      <a href="report_issue.html" class="nav-link">Report an issue</a>
+      <a href="profile.html" class="nav-link font-bold text-ink">Profile</a>
+      <a href="login.html" class="nav-link text-muted mt-8">Log out</a>
+    </div>
+  </nav>
+
+  <main class="container py-4" x-data="{
+    name: 'Hriddesh Roy',
+    major: 'Computer Science',
+    role: 'Student',
+    isEditing: false,
+    reported: mockIssues.filter(i => i.id === 3 || i.id === 6),
+    supported: mockIssues.filter(i => i.id === 2 || i.id === 4),
+    
+    get initials() {
+      return this.name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
+    },
+    
+    saveProfile() {
+      this.isEditing = false;
+    }
+  }">
+    
+    <!-- Profile Header -->
+    <div class="bg-surface border border-border rounded-lg p-6 md:p-8 flex flex-col md:flex-row items-center md:items-start gap-6 mb-8 mt-4">
+      <div class="avatar flex-shrink-0" style="width: 80px; height: 80px; font-size: 2rem;" x-text="initials">HR</div>
+      <div class="text-center md:text-left flex-grow w-full md:w-auto">
+        
+        <!-- View Mode -->
+        <div x-show="!isEditing">
+          <h1 class="mb-1 text-2xl" x-text="name"></h1>
+          <p class="text-muted mb-4"><span x-text="role"></span> &bull; <span x-text="major"></span></p>
+          <div class="flex flex-wrap justify-center md:justify-start gap-6">
+            <div><div class="text-xl font-bold font-mono text-ink">2</div><div class="text-xs uppercase tracking-wide text-muted font-bold">Reported</div></div>
+            <div><div class="text-xl font-bold font-mono text-ink">2</div><div class="text-xs uppercase tracking-wide text-muted font-bold">Supporting</div></div>
+            <div><div class="text-xl font-bold font-mono text-status-resolved-text">1</div><div class="text-xs uppercase tracking-wide text-muted font-bold">Resolved</div></div>
+          </div>
+        </div>
+
+        <!-- Edit Mode -->
+        <div x-show="isEditing" style="display: none;" class="flex flex-col gap-3 max-w-sm mx-auto md:mx-0">
+          <input type="text" x-model="name" class="form-input text-lg font-bold" placeholder="Your Name">
+          <input type="text" x-model="major" class="form-input" placeholder="Your Major">
+          <div class="flex gap-2 mt-2 justify-center md:justify-start">
+            <button @click="saveProfile" class="btn btn-primary py-1 px-4">Save</button>
+            <button @click="isEditing = false" class="btn btn-ghost py-1 px-4">Cancel</button>
+          </div>
+        </div>
+        
+      </div>
+      <button x-show="!isEditing" @click="isEditing = true" class="btn btn-secondary flex-shrink-0"><i class="ph ph-pencil-simple"></i> Edit Profile</button>
+    </div>
+
+    <!-- Issues I Reported -->
+    <h2 class="text-xl mb-4 flex items-center gap-2"><i class="ph-fill ph-megaphone text-accent"></i> Issues I reported</h2>
+    
+    <div x-show="reported.length === 0" class="text-center py-8 text-muted bg-surface rounded-lg border border-border mb-8 border-dashed" style="display: none;">
+      <i class="ph ph-file-dashed text-4xl mb-2"></i>
+      <p>You haven't reported any issues yet.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+      <template x-for="issue in reported" :key="issue.id">
+        <a :href="`issue_detail.html?id=${issue.id}`" class="block bg-surface border border-border rounded-lg p-5 hover:border-accent hover:shadow-md transition-all h-full flex flex-col relative overflow-hidden group">
+          <div class="absolute top-0 left-0 w-full h-1 bg-border">
+            <div class="h-full transition-all" 
+                 :class="{'bg-status-open-text w-1/3': issue.status==='Open', 'bg-status-progress-text w-2/3': issue.status==='In Progress', 'bg-status-resolved-text w-full': issue.status==='Resolved'}"></div>
+          </div>
+          
+          <div class="flex justify-between items-start mb-3 mt-1">
+            <span class="badge" :class="{'badge-status-open': issue.status==='Open', 'badge-status-progress': issue.status==='In Progress', 'badge-status-resolved': issue.status==='Resolved'}" x-text="issue.status"></span>
+            <div class="text-sm font-bold font-mono text-ink" title="Impact Score">Score <span x-text="issue.score"></span></div>
+          </div>
+          <h3 class="text-base font-bold text-ink mb-1 group-hover:text-accent transition-colors" x-text="issue.title"></h3>
+          <div class="text-xs text-muted mb-4"><i class="ph-fill ph-map-pin"></i> <span x-text="issue.location"></span></div>
+          
+          <div class="mt-auto pt-4 border-t border-bg text-sm">
+            <span x-show="issue.status !== 'Resolved'" class="text-muted"><i class="ph ph-clock"></i> Open for <span x-text="issue.daysOpen"></span> days</span>
+            <span x-show="issue.status === 'Resolved'" class="text-status-resolved-text font-bold"><i class="ph-bold ph-check"></i> Resolved in 5 days</span>
+          </div>
+        </a>
+      </template>
+    </div>
+
+    <!-- Issues I Support -->
+    <h2 class="text-xl mb-4 flex items-center gap-2 text-muted"><i class="ph-fill ph-thumbs-up"></i> Issues I support</h2>
+    
+    <div x-show="supported.length === 0" class="text-center py-8 text-muted bg-surface rounded-lg border border-border border-dashed" style="display: none;">
+      <i class="ph ph-users text-4xl mb-2"></i>
+      <p>You aren't supporting any issues yet.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      <template x-for="issue in supported" :key="issue.id">
+        <a :href="`issue_detail.html?id=${issue.id}`" class="block bg-bg border border-border rounded-lg p-5 hover:border-ink transition-all h-full flex flex-col relative overflow-hidden group">
+          <div class="absolute top-0 left-0 w-full h-1 bg-border opacity-50">
+            <div class="h-full transition-all" 
+                 :class="{'bg-status-open-text w-1/3': issue.status==='Open', 'bg-status-progress-text w-2/3': issue.status==='In Progress', 'bg-status-resolved-text w-full': issue.status==='Resolved'}"></div>
+          </div>
+          
+          <div class="flex justify-between items-start mb-3 mt-1">
+            <span class="badge" :class="{'badge-status-open': issue.status==='Open', 'badge-status-progress': issue.status==='In Progress', 'badge-status-resolved': issue.status==='Resolved'}" x-text="issue.status"></span>
+            <div class="text-sm font-bold font-mono text-muted" title="Impact Score">Score <span x-text="issue.score"></span></div>
+          </div>
+          <h3 class="text-base font-bold text-ink mb-1 group-hover:text-accent transition-colors" x-text="issue.title"></h3>
+          <div class="text-xs text-muted mb-4">Reported by <span x-text="issue.reportedBy"></span></div>
+          
+          <div class="mt-auto pt-4 border-t border-border text-sm flex justify-between">
+            <span x-show="issue.status !== 'Resolved'" class="text-muted"><i class="ph ph-clock"></i> Open for <span x-text="issue.daysOpen"></span> days</span>
+            <span x-show="issue.status === 'Resolved'" class="text-status-resolved-text font-bold"><i class="ph-bold ph-check"></i> Resolved</span>
+            <span class="text-accent font-bold text-xs bg-accent-soft px-2 py-1 rounded">Supported</span>
+          </div>
+        </a>
+      </template>
+    </div>
+
+  </main>
+
+</body>
+</html>

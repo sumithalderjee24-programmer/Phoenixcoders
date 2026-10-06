@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - CampusFix</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body class="bg-surface">
+  <div class="auth-layout" x-data="{ error: false, showPassword: false }">
+    
+    <!-- Brand Panel (Desktop only) -->
+    <div class="auth-panel-left">
+      <div class="auth-bg-shapes">
+        <div class="auth-shape auth-shape-1"></div>
+        <div class="auth-shape auth-shape-2"></div>
+      </div>
+      
+      <div class="auth-content h-full flex flex-col justify-between">
+        <div class="nav-brand text-2xl mb-8"><i class="ph-fill ph-wrench text-accent"></i> CampusFix</div>
+        
+        <div>
+          <h1 class="text-4xl md:text-5xl font-bold mb-4">Every issue.<br>Tracked. Resolved.</h1>
+          <p class="text-lg text-gray-400 mb-12 max-w-md">The transparent accountability system for campus infrastructure. No more ignored complaint registers.</p>
+          
+          <div class="flex flex-col gap-6">
+            <div class="flex items-start gap-4">
+              <div class="bg-white/10 p-3 rounded-lg"><i class="ph-bold ph-sort-descending text-xl"></i></div>
+              <div>
+                <h3 class="text-base font-bold mb-1">Ranked by impact</h3>
+                <p class="text-sm text-gray-400">Issues are prioritised by community votes, severity, and time waiting.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="bg-white/10 p-3 rounded-lg"><i class="ph-bold ph-copy text-xl"></i></div>
+              <div>
+                <h3 class="text-base font-bold mb-1">Duplicates caught early</h3>
+                <p class="text-sm text-gray-400">Smart matching guides students to support existing issues instead of filing new ones.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="bg-white/10 p-3 rounded-lg"><i class="ph-bold ph-eye text-xl"></i></div>
+              <div>
+                <h3 class="text-base font-bold mb-1">Every status public</h3>
+                <p class="text-sm text-gray-400">Full visibility into who reported what, and when the admin last responded.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="text-xs text-gray-500 mt-8">&copy; 2026 CampusFix</div>
+      </div>
+    </div>
+
+    <!-- Login Form -->
+    <div class="auth-panel-right">
+      <div class="w-full">
+        <!-- Mobile header -->
+        <div class="md:hidden flex items-center gap-2 font-heading font-bold text-xl mb-8 text-ink">
+          <i class="ph-fill ph-wrench text-accent"></i> CampusFix
+        </div>
+
+        <div x-show="window.location.hash === '#registered'" class="bg-status-resolved-bg text-status-resolved-text p-4 rounded-md mb-6 text-sm font-medium flex gap-2" style="display:none;">
+          <i class="ph-fill ph-check-circle text-lg"></i> Account created successfully. Please log in.
+        </div>
+
+        <h2 class="mb-2">Welcome back</h2>
+        <p class="text-muted mb-8">Log in with your university credentials.</p>
+
+        <form @submit.prevent="error = true" class="flex flex-col gap-5">
+          <div class="form-group mb-0" :class="{'has-error': error}">
+            <label class="form-label">Email address</label>
+            <input type="email" required class="form-input" placeholder="student@university.edu" autocomplete="email">
+          </div>
+
+          <div class="form-group mb-0 relative" :class="{'has-error': error}">
+            <label class="form-label">Password</label>
+            <div class="relative">
+              <input :type="showPassword ? 'text' : 'password'" required class="form-input" placeholder="Enter password" autocomplete="current-password" style="padding-right: 40px;">
+              <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-ink" @click="showPassword = !showPassword" aria-label="Toggle password visibility">
+                <i class="ph" :class="showPassword ? 'ph-eye-slash' : 'ph-eye'"></i>
+              </button>
+            </div>
+            <div class="form-error-msg mt-1"><i class="ph-bold ph-warning-circle"></i> Invalid email or password.</div>
+          </div>
+
+          <button type="button" @click="window.location.href='index.html'" class="btn btn-primary w-full py-3 mt-4 text-base">Log in as Student</button>
+        </form>
+
+        <div class="mt-8 text-center text-sm">
+          <span class="text-muted">Don't have an account?</span> <a href="register.html" class="font-bold text-accent hover:underline">Create account</a>
+        </div>
+        
+        <div class="mt-12 text-center">
+          <a href="admin_dashboard.html" class="text-xs font-bold text-muted border border-border px-3 py-1 rounded-pill hover:bg-bg transition-colors">Sign in as admin (demo)</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
