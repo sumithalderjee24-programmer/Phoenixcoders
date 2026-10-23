@@ -613,3 +613,68 @@ input, textarea, select { font-family: inherit; }
 .segment-text { display: block; padding: 8px; border-radius: var(--radius-sm); font-size: 0.875rem; font-weight: 500; color: var(--muted); transition: all var(--duration-fast); }
 .segment-input:checked + .segment-text { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-sm); }
 .segment-desc { display: block; font-size: 0.75rem; color: var(--muted); font-weight: 400; margin-top: 2px; }
+
+/* Dark Theme & Theme Toggle */
+[data-theme="dark"] {
+  --bg: #0F1117;
+  --surface: #181B23;
+  --ink: #F9FAFB;
+  --muted: #9CA3AF;
+  --border: #2D3342;
+  --accent: #6366F1;
+  --accent-soft: #232742;
+  --accent-hover: #4F46E5;
+  
+  --status-open-text: #FBBF24;
+  --status-open-bg: #452C06;
+  --status-progress-text: #60A5FA;
+  --status-progress-bg: #1E3A8A;
+  --status-resolved-text: #4ADE80;
+  --status-resolved-bg: #14532D;
+  
+  --severity-low-text: #E5E7EB;
+  --severity-low-bg: #2B3040;
+  --severity-med-text: #FB923C;
+  --severity-med-bg: #451A03;
+  --severity-high-text: #F87171;
+  --severity-high-bg: #450A0A;
+}
+
+[data-theme="dark"] .navbar {
+  background-color: rgba(24, 27, 35, 0.95);
+  border-bottom-color: var(--border);
+}
+
+[data-theme="dark"] .form-input,
+[data-theme="dark"] .form-textarea,
+[data-theme="dark"] .form-select,
+[data-theme="dark"] .filter-select,
+[data-theme="dark"] .filter-search {
+  background: #111319;
+  color: var(--ink);
+  border-color: var(--border);
+}
+
+/* Theme Toggle Button (Sun & Moon) */
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  transition: all var(--duration-fast);
+  font-size: 1.2rem;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: var(--accent);
+}

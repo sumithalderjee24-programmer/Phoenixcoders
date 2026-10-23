@@ -22,8 +22,12 @@
         <a href="report_issue.html" class="nav-link">Report an issue</a>
         <a href="profile.html" class="nav-link">Profile</a>
         <a href="login.html" class="nav-link">Log out</a>
+              <!-- Bright / Dark Mode Toggle (Sun / Moon) -->
+        <button type="button" class="theme-toggle-btn" @click="$store.theme.toggle()" :title="$store.theme.mode === 'dark' ? 'Switch to Bright Mode' : 'Switch to Dark Mode'" aria-label="Toggle Bright / Dark mode">
+          <i class="ph-bold" :class="$store.theme.mode === 'dark' ? 'ph-sun text-yellow-400' : 'ph-moon text-indigo-600'"></i>
+        </button>
       </div>
-      <button class="hamburger" @click="mobileMenuOpen = !mobileMenuOpen" aria-label="Toggle menu">
+        <button class="hamburger" @click="mobileMenuOpen = !mobileMenuOpen" aria-label="Toggle menu">
         <i class="ph ph-list"></i>
       </button>
     </div>
