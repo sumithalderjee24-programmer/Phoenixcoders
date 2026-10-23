@@ -26,6 +26,15 @@
         <button type="button" class="theme-toggle-btn" @click="$store.theme.toggle()" :title="$store.theme.mode === 'dark' ? 'Switch to Bright Mode' : 'Switch to Dark Mode'" aria-label="Toggle Bright / Dark mode">
           <i class="ph-bold" :class="$store.theme.mode === 'dark' ? 'ph-sun text-yellow-400' : 'ph-moon text-indigo-600'"></i>
         </button>
+        <!-- Circular Profile Image Logo (Top Right) -->
+        <a href="profile.html" class="nav-profile-pill" title="My Profile">
+          <template x-if="$store.auth && $store.auth.user.avatar">
+            <img :src="$store.auth.user.avatar" alt="Profile">
+          </template>
+          <template x-if="!$store.auth || !$store.auth.user.avatar">
+            <span class="avatar-fallback" x-text="$store.auth ? $store.auth.initials : 'HR'"></span>
+          </template>
+        </a>
       </div>
         <button class="hamburger" @click="mobileMenuOpen = !mobileMenuOpen" aria-label="Toggle menu">
         <i class="ph ph-list"></i>

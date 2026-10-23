@@ -108,6 +108,37 @@ document.addEventListener('alpine:init', () => {
       this.mode = toggleGlobalTheme();
     }
   });
+
+  // Profile & Auth Store for Navbar Logo and Verification
+  Alpine.store('auth', {
+    user: {
+      name: 'Hriddesh Roy',
+      major: 'Computer Science',
+      role: 'Student',
+      studentId: 'CS2026-9042',
+      avatar: null,
+      idCard: null,
+      signature: null
+    },
+    init() {
+      try {
+        const saved = localStorage.getItem('campusfix_profile');
+        if (saved) {
+          this.user = { ...this.user, ...JSON.parse(saved) };
+        }
+      } catch (e) {}
+    },
+    get initials() {
+      if (!this.user.name) return 'HR';
+      return this.user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+    },
+    save(data) {
+      this.user = { ...this.user, ...data };
+      try {
+        localStorage.setItem('campusfix_profile', JSON.stringify(this.user));
+      } catch (e) {}
+    }
+  });
   
   Alpine.data('issueFeed', () => ({
     issues: [],
