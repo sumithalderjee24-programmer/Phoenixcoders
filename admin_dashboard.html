@@ -21,14 +21,22 @@
       <div class="nav-links">
         <a href="admin_dashboard.html" class="nav-link" aria-current="page">Dashboard</a>
         <a href="login.html" class="nav-link">Log out</a>
+              <!-- Bright / Dark Mode Toggle (Sun / Moon) -->
+        <button type="button" class="theme-toggle-btn" @click="$store.theme.toggle()" :title="$store.theme.mode === 'dark' ? 'Switch to Bright Mode' : 'Switch to Dark Mode'" aria-label="Toggle Bright / Dark mode">
+          <i class="ph-bold" :class="$store.theme.mode === 'dark' ? 'ph-sun text-yellow-400' : 'ph-moon text-indigo-600'"></i>
+        </button>
       </div>
-      <button class="hamburger" @click="mobileMenuOpen = !mobileMenuOpen" aria-label="Toggle menu">
+        <button class="hamburger" @click="mobileMenuOpen = !mobileMenuOpen" aria-label="Toggle menu">
         <i class="ph ph-list"></i>
       </button>
     </div>
     <div class="mobile-menu" x-show="mobileMenuOpen" style="display: none;">
       <div class="flex justify-between items-center mb-4">
-        <div class="nav-brand"><i class="ph-fill ph-wrench text-admin-accent"></i> ADMIN</div>
+        <div class="nav-brand"><i class="ph-fill ph-wrench text-admin-accent"></i> ADMIN        <!-- Bright / Dark Mode Toggle (Sun / Moon) -->
+        <button type="button" class="theme-toggle-btn" @click="$store.theme.toggle()" :title="$store.theme.mode === 'dark' ? 'Switch to Bright Mode' : 'Switch to Dark Mode'" aria-label="Toggle Bright / Dark mode">
+          <i class="ph-bold" :class="$store.theme.mode === 'dark' ? 'ph-sun text-yellow-400' : 'ph-moon text-indigo-600'"></i>
+        </button>
+      </div>
         <button class="hamburger" @click="mobileMenuOpen = false"><i class="ph ph-x"></i></button>
       </div>
       <a href="admin_dashboard.html" class="nav-link font-bold text-surface">Dashboard</a>
