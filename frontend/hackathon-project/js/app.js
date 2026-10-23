@@ -486,6 +486,91 @@ document.addEventListener('alpine:init', () => {
     }
   }));
 
+  Alpine.data('profileManager', () => ({
+    user: {
+      name: 'Hriddesh Roy',
+      major: 'Computer Science',
+      role: 'Student',
+      studentId: 'CS2026-9042',
+      email: 'student@university.edu',
+      avatar: null,
+      idCard: null,
+      signature: null
+    },
+    isEditing: false,
+    allIssues: [],
+
+    init() {
+      this.allIssues = getPreparedIssues();
+      try {
+        const saved = localStorage.getItem('campusfix_profile');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          this.user = { ...this.user, ...parsed };
+        }
+      } catch (e) {
+        console.warn('Profile read error:', e);
+      }
+    },
+
+    get initials() {
+      if (!this.user || !this.user.name) return 'HR';
+      return this.user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+    },
+
+    get reported() {
+      return this.allIssues.filter(i => 
+        i.reportedBy === 'You (Student)' || 
+        i.reportedBy === (this.user && this.user.name) ||
+        i.id === 3 || i.id === 6
+      );
+    },
+
+    get supported() {
+      return this.allIssues.filter(i => 
+        Boolean(i.hasUpvoted || i.id === 2 || i.id === 4)
+      );
+    },
+
+    get resolvedCount() {
+      return this.reported.filter(i => i.status === 'Resolved').length;
+    },
+
+    handleFileUpload(e, type) {
+      const file = e.target.files ? e.target.files[0] : null;
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const result = ev.target.result;
+        // Reassign a new object so Alpine detects the change reactively
+        this.user = { ...this.user, [type]: result };
+        this.saveProfile();
+        
+        // Also update the global Alpine auth store immediately
+        if (Alpine.store('auth')) {
+          Alpine.store('auth').save({ [type]: result });
+        }
+
+        const label = type === 'avatar' ? 'Profile Photo' : (type === 'idCard' ? 'Student ID Card' : 'Signature');
+        window.dispatchEvent(new CustomEvent('toast', { detail: `${label} uploaded successfully!` }));
+      };
+      reader.readAsDataURL(file);
+    },
+
+    saveProfile() {
+      this.isEditing = false;
+      try {
+        localStorage.setItem('campusfix_profile', JSON.stringify(this.user));
+        if (Alpine.store('auth')) {
+          Alpine.store('auth').save(this.user);
+        }
+      } catch (e) {
+        console.error('Failed to save profile', e);
+      }
+    }
+  }));
+
   Alpine.data('toastManager', () => ({
     toasts: [],
     init() {
