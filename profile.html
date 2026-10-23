@@ -42,16 +42,58 @@
       </button>
     </div>
 
-    <!-- Mobile Menu -->
+    <!-- Mobile Menu / Drawer -->
     <div class="mobile-menu" x-show="mobileMenuOpen" x-transition.opacity style="display: none;">
-      <div class="flex justify-between items-center mb-4">
-        <div class="nav-brand"><i class="ph-fill ph-wrench"></i> CampusFix</div>
-        <button class="hamburger" @click="mobileMenuOpen = false"><i class="ph ph-x"></i></button>
+      <div class="flex justify-between items-center mb-4 pb-3 border-b border-border">
+        <div class="nav-brand"><i class="ph-fill ph-wrench text-accent"></i> CampusFix</div>
+        <button class="hamburger" @click="mobileMenuOpen = false" aria-label="Close menu"><i class="ph ph-x text-xl"></i></button>
       </div>
-      <a href="index.html" class="nav-link">Browse</a>
-      <a href="report_issue.html" class="nav-link">Report an issue</a>
-      <a href="profile.html" class="nav-link font-bold text-ink">Profile</a>
-      <a href="login.html" class="nav-link text-muted mt-8">Log out</a>
+
+      <!-- User Profile Pill in Drawer -->
+      <a href="profile.html" class="flex items-center gap-3 p-3 rounded-lg bg-bg border border-border mb-2">
+        <div class="nav-profile-pill" style="width: 40px; height: 40px;">
+          <template x-if="$store.auth && $store.auth.user.avatar">
+            <img :src="$store.auth.user.avatar" alt="Profile">
+          </template>
+          <template x-if="!$store.auth || !$store.auth.user.avatar">
+            <span class="avatar-fallback" x-text="$store.auth ? $store.auth.initials : 'HR'"></span>
+          </template>
+        </div>
+        <div>
+          <div class="font-bold text-sm text-ink" x-text="$store.auth && $store.auth.user.name ? $store.auth.user.name : 'Hriddesh Roy'"></div>
+          <div class="text-xs text-muted">View & Edit Profile &rarr;</div>
+        </div>
+      </a>
+
+      <!-- Drawer Links -->
+      <a href="index.html" class="nav-link font-medium flex items-center justify-between">
+        <span><i class="ph-bold ph-compass mr-2 text-accent"></i> Browse</span>
+        <i class="ph ph-caret-right text-muted"></i>
+      </a>
+      <a href="report_issue.html" class="nav-link font-medium flex items-center justify-between">
+        <span><i class="ph-bold ph-plus-circle mr-2 text-accent"></i> Report an issue</span>
+        <i class="ph ph-caret-right text-muted"></i>
+      </a>
+      <a href="profile.html" class="nav-link font-bold text-ink flex items-center justify-between">
+        <span><i class="ph-bold ph-user mr-2 text-accent"></i> Profile</span>
+        <i class="ph ph-caret-right text-muted"></i>
+      </a>
+
+      <!-- Theme Switcher in Drawer -->
+      <div class="mt-4 pt-4 border-t border-border flex items-center justify-between">
+        <span class="text-sm font-semibold flex items-center gap-2">
+          <i class="ph-bold" :class="$store.theme.mode === 'dark' ? 'ph-moon text-indigo-400' : 'ph-sun text-yellow-500'"></i>
+          <span x-text="$store.theme.mode === 'dark' ? 'Dark Mode' : 'Bright Mode'"></span>
+        </span>
+        <button type="button" class="btn btn-secondary text-xs py-1 px-3" @click="$store.theme.toggle()">
+          <span x-text="$store.theme.mode === 'dark' ? 'Switch to Bright' : 'Switch to Dark'"></span>
+        </button>
+      </div>
+
+      <!-- Logout in Drawer -->
+      <a href="login.html" class="nav-link text-red-500 mt-4 flex items-center gap-2">
+        <i class="ph-bold ph-sign-out"></i> Log out
+      </a>
     </div>
   </nav>
 
@@ -317,6 +359,16 @@
     </div>
 
   </main>
+
+  <!-- Toast -->
+  <div x-data="toastManager" class="toast-container">
+    <template x-for="toast in toasts" :key="toast.id">
+      <div class="toast animate-fade-in">
+        <i class="ph-fill ph-check-circle text-accent"></i>
+        <span x-text="toast.msg"></span>
+      </div>
+    </template>
+  </div>
 
 </body>
 </html>
