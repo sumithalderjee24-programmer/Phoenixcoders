@@ -106,7 +106,7 @@
       <div class="relative z-10 flex flex-col md:flex-row items-center md:items-end justify-between gap-6 pt-4">
         
         <div class="flex flex-col md:flex-row items-center md:items-end gap-5 text-center md:text-left">
-          <!-- Avatar with Camera Uploader -->
+          <!-- Avatar with Camera Uploader & Preset Options -->
           <div class="flex flex-col items-center">
             <div class="profile-avatar-wrap">
               <template x-if="user.avatar">
@@ -117,38 +117,62 @@
               </template>
             </div>
             
-            <label class="photo-badge-btn">
-              <i class="ph-bold ph-camera"></i> Change Photo
-              <input type="file" accept="image/*" class="hidden" @change="handleFileUpload($event, 'avatar')">
-            </label>
+            <div class="flex items-center gap-2 mt-2">
+              <label class="photo-badge-btn" title="Upload custom photo from device">
+                <i class="ph-bold ph-camera"></i> Upload
+                <input type="file" accept="image/*" class="hidden" @change="handleFileUpload(, 'avatar')">
+              </label>
+
+              <button type="button" class="photo-badge-btn" @click="showAvatarPicker = !showAvatarPicker" :class="{'border-accent text-accent': showAvatarPicker}" title="Choose from preset avatars">
+                <i class="ph-bold ph-user-circle"></i> Avatars
+              </button>
+            </div>
+
+            <!-- Avatar Presets Dropdown Panel -->
+            <div x-show="showAvatarPicker" x-transition.opacity @click.outside="showAvatarPicker = false" style="display: none;" class="mt-3 p-3 bg-surface border border-border rounded-lg shadow-lg flex flex-col gap-2 z-20">
+              <div class="text-xs font-bold text-ink flex items-center justify-between">
+                <span>Choose an Avatar</span>
+                <button type="button" @click="showAvatarPicker = false" class="text-muted hover:text-ink"><i class="ph-bold ph-x"></i></button>
+              </div>
+              <div class="flex items-center gap-2">
+                <template x-for="av in presetAvatars" :key="av.id">
+                  <button type="button" class="avatar-preset-btn" :class="{'active': user.avatar === av.url}" @click="selectPresetAvatar(av.url)" :title="av.label">
+                    <img :src="av.url" :alt="av.label">
+                  </button>
+                </template>
+              </div>
+            </div>
           </div>
 
-          <!-- User Details (View Mode) -->
+          <!-- User Details (View Mode) with Clean Aligned Typography -->
           <div x-show="!isEditing" class="mb-2">
-            <div class="flex items-center justify-center md:justify-start gap-2 flex-wrap mb-1">
-              <h1 class="text-2xl font-bold" x-text="user.name">Hriddesh Roy</h1>
-              <span class="badge badge-status-resolved text-xs font-bold"><i class="ph-bold ph-shield-check mr-1"></i> Verified Student</span>
+            <div class="flex items-center justify-center md:justify-start gap-3 flex-wrap mb-2">
+              <h1 class="text-2xl md:text-3xl font-extrabold text-ink leading-tight m-0" x-text="user.name">Hriddesh Roy</h1>
+              <span class="badge badge-status-resolved text-xs font-bold inline-flex items-center gap-1.5 py-1 px-2.5 shadow-sm">
+                <i class="ph-fill ph-shield-check text-sm"></i> Verified Student
+              </span>
             </div>
             
-            <p class="text-muted text-sm flex items-center justify-center md:justify-start gap-2 flex-wrap mb-3">
-              <span><i class="ph-bold ph-graduation-cap"></i> <span x-text="user.major"></span></span>
-              <span>&bull;</span>
-              <span><i class="ph-bold ph-identification-badge"></i> ID: <span class="font-mono font-bold text-ink" x-text="user.studentId"></span></span>
-              <span>&bull;</span>
-              <span><i class="ph-bold ph-envelope"></i> <span x-text="user.email || 'student@university.edu'"></span></span>
-            </p>
+            <div class="text-muted text-sm flex items-center justify-center md:justify-start gap-3 flex-wrap mb-3">
+              <span class="inline-flex items-center gap-1.5"><i class="ph-bold ph-graduation-cap text-accent"></i> <span x-text="user.major"></span></span>
+              <span class="text-border">&bull;</span>
+              <span class="inline-flex items-center gap-1.5"><i class="ph-bold ph-identification-badge text-accent"></i> ID: <span class="font-mono font-bold text-ink" x-text="user.studentId"></span></span>
+              <span class="text-border">&bull;</span>
+              <span class="inline-flex items-center gap-1.5"><i class="ph-bold ph-envelope text-accent"></i> <span x-text="user.email || 'student@university.edu'"></span></span>
+            </div>
 
-            <div class="flex items-center justify-center md:justify-start gap-2">
-              <span class="badge badge-outline text-xs"><i class="ph-bold ph-calendar"></i> Joined Fall 2026</span>
-              <span class="badge badge-outline text-xs"><i class="ph-bold ph-buildings"></i> Main Campus</span>
+            <div class="flex items-center justify-center md:justify-start gap-2 flex-wrap">
+              <span class="badge badge-outline text-xs inline-flex items-center gap-1"><i class="ph-bold ph-calendar text-muted"></i> Joined Fall 2026</span>
+              <span class="badge badge-outline text-xs inline-flex items-center gap-1"><i class="ph-bold ph-buildings text-muted"></i> Main Campus</span>
+              <span class="badge badge-outline text-xs inline-flex items-center gap-1"><i class="ph-bold ph-circle-wavy-check text-status-resolved-text"></i> Good Standing</span>
             </div>
           </div>
         </div>
 
         <!-- Prominent Edit Profile Button -->
-        <div x-show="!isEditing" class="flex items-center gap-3 mb-2">
-          <button @click="isEditing = true" class="btn btn-primary px-5 py-2.5 font-bold shadow-sm">
-            <i class="ph-bold ph-pencil-simple text-base mr-1"></i> Edit Profile
+        <div x-show="!isEditing" class="flex items-center gap-3 mb-2 flex-shrink-0">
+          <button @click="isEditing = true" class="btn btn-primary px-5 py-2.5 font-bold shadow-md inline-flex items-center gap-2">
+            <i class="ph-bold ph-pencil-simple text-base"></i> Edit Profile
           </button>
         </div>
       </div>
@@ -180,36 +204,46 @@
         </div>
       </div>
 
-      <!-- Quick Metrics Strip -->
+      <!-- Quick Metrics Strip with Colorful Gradient Badges -->
       <div class="mt-8 pt-6 border-t border-border flex flex-wrap gap-4 items-center justify-between">
         <div class="flex flex-wrap gap-4">
-          <div class="profile-stat-box">
+          <div class="profile-stat-box stat-logged">
+            <div class="flex items-center justify-between gap-2 mb-1">
+              <span class="profile-stat-label">Issues Logged</span>
+              <i class="ph-bold ph-megaphone text-indigo-500"></i>
+            </div>
             <div class="profile-stat-number" x-text="reported.length">2</div>
-            <div class="profile-stat-label">Issues Logged</div>
           </div>
-          <div class="profile-stat-box">
-            <div class="profile-stat-number text-accent" x-text="supported.length">2</div>
-            <div class="profile-stat-label">Supported</div>
+          <div class="profile-stat-box stat-supported">
+            <div class="flex items-center justify-between gap-2 mb-1">
+              <span class="profile-stat-label">Supported</span>
+              <i class="ph-bold ph-thumbs-up text-amber-500"></i>
+            </div>
+            <div class="profile-stat-number" x-text="supported.length">2</div>
           </div>
-          <div class="profile-stat-box">
-            <div class="profile-stat-number text-status-resolved-text" x-text="resolvedCount">1</div>
-            <div class="profile-stat-label">Resolved</div>
+          <div class="profile-stat-box stat-resolved">
+            <div class="flex items-center justify-between gap-2 mb-1">
+              <span class="profile-stat-label">Resolved</span>
+              <i class="ph-bold ph-check-circle text-emerald-500"></i>
+            </div>
+            <div class="profile-stat-number" x-text="resolvedCount">1</div>
           </div>
         </div>
 
-        <div class="text-xs text-muted flex items-center gap-1">
+        <div class="text-xs text-muted inline-flex items-center gap-1.5 bg-bg py-2 px-3.5 rounded-full border border-border">
           <i class="ph-fill ph-check-circle text-status-resolved-text text-base"></i>
-          <span>Account verified for campus facilities triage</span>
+          <span class="font-medium">Account verified for campus facilities triage</span>
         </div>
       </div>
     </div>
 
     <!-- Compulsory Student ID & Signature Verification Section -->
-    <div class="mb-4">
-      <h2 class="text-xl font-bold flex items-center gap-2 mb-1">
-        <i class="ph-fill ph-shield-check text-accent"></i> Identity Verification Documents
-      </h2>
-      <p class="text-muted text-sm mb-6">Mandatory credentials required to prevent false reports and authenticate high-impact campus maintenance.</p>
+    <div class="mb-6">
+      <div class="flex items-center gap-2 mb-1">
+        <i class="ph-fill ph-shield-check text-accent text-2xl"></i>
+        <h2 class="text-xl md:text-2xl font-extrabold text-ink leading-tight m-0">Identity Verification Documents</h2>
+      </div>
+      <p class="text-muted text-sm m-0">Mandatory credentials required to prevent false reports and authenticate high-impact campus maintenance.</p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
@@ -217,12 +251,13 @@
       <!-- Student ID Card Upload (Compulsory) -->
       <div class="verification-card">
         <div>
-          <div class="flex justify-between items-start mb-2">
+          <div class="flex justify-between items-start mb-3 gap-3">
             <div>
-              <h3 class="text-base font-bold flex items-center gap-2">
-                <i class="ph-bold ph-identification-card text-accent"></i> Campus Student ID Card
-              </h3>
-              <p class="text-xs text-muted mt-1">Official physical college identity card with visible photo and roll number.</p>
+              <div class="flex items-center gap-2">
+                <i class="ph-bold ph-identification-card text-accent text-lg"></i>
+                <h3 class="text-base font-bold text-ink leading-tight m-0">Campus Student ID Card</h3>
+              </div>
+              <p class="text-xs text-muted mt-1 leading-snug">Official physical college identity card with visible photo and roll number.</p>
             </div>
             <span :class="user.idCard ? 'verification-badge-done' : 'verification-badge-req'" 
                   x-text="user.idCard ? 'Uploaded & Verified' : 'Compulsory Document'"></span>
@@ -233,7 +268,7 @@
               <img :src="user.idCard" alt="Student ID Card">
             </template>
             <template x-if="!user.idCard">
-              <div class="text-center p-4 text-muted">
+              <div class="text-center p-4 text-muted flex flex-col items-center justify-center">
                 <i class="ph-bold ph-image text-3xl mb-1 text-gray-400"></i>
                 <div class="text-xs font-semibold">No ID card uploaded yet</div>
                 <div class="text-xs opacity-75">Click upload button below to select image</div>
@@ -242,22 +277,23 @@
           </div>
         </div>
 
-        <label class="btn btn-secondary w-full py-2.5 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:border-accent">
+        <label class="btn btn-secondary w-full py-2.5 text-xs font-bold inline-flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:border-accent">
           <i class="ph-bold ph-upload-simple"></i>
           <span x-text="user.idCard ? 'Replace ID Card Photo' : 'Upload Student ID Photo'"></span>
-          <input type="file" accept="image/*" class="hidden" @change="handleFileUpload($event, 'idCard')">
+          <input type="file" accept="image/*" class="hidden" @change="handleFileUpload(, 'idCard')">
         </label>
       </div>
 
       <!-- Signature Upload (Compulsory) -->
       <div class="verification-card">
         <div>
-          <div class="flex justify-between items-start mb-2">
+          <div class="flex justify-between items-start mb-3 gap-3">
             <div>
-              <h3 class="text-base font-bold flex items-center gap-2">
-                <i class="ph-bold ph-pen-nib text-accent"></i> Official Digital Signature
-              </h3>
-              <p class="text-xs text-muted mt-1">Legally binding signature attached to authorize campus maintenance tickets.</p>
+              <div class="flex items-center gap-2">
+                <i class="ph-bold ph-pen-nib text-accent text-lg"></i>
+                <h3 class="text-base font-bold text-ink leading-tight m-0">Official Digital Signature</h3>
+              </div>
+              <p class="text-xs text-muted mt-1 leading-snug">Legally binding signature attached to authorize campus maintenance tickets.</p>
             </div>
             <span :class="user.signature ? 'verification-badge-done' : 'verification-badge-req'" 
                   x-text="user.signature ? 'Uploaded & Verified' : 'Compulsory Document'"></span>
@@ -268,7 +304,7 @@
               <img :src="user.signature" alt="Official Signature">
             </template>
             <template x-if="!user.signature">
-              <div class="text-center p-4 text-muted">
+              <div class="text-center p-4 text-muted flex flex-col items-center justify-center">
                 <i class="ph-bold ph-pen-nib text-3xl mb-1 text-gray-400"></i>
                 <div class="text-xs font-semibold">No signature uploaded yet</div>
                 <div class="text-xs opacity-75">Click upload button below to select image</div>
@@ -277,10 +313,10 @@
           </div>
         </div>
 
-        <label class="btn btn-secondary w-full py-2.5 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:border-accent">
+        <label class="btn btn-secondary w-full py-2.5 text-xs font-bold inline-flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:border-accent">
           <i class="ph-bold ph-upload-simple"></i>
           <span x-text="user.signature ? 'Replace Signature Image' : 'Upload Signature Image'"></span>
-          <input type="file" accept="image/*" class="hidden" @change="handleFileUpload($event, 'signature')">
+          <input type="file" accept="image/*" class="hidden" @change="handleFileUpload(, 'signature')">
         </label>
       </div>
 
@@ -288,17 +324,18 @@
 
     <!-- Issues I Reported -->
     <div class="flex items-center justify-between mb-4">
-      <h2 class="text-xl font-bold flex items-center gap-2">
-        <i class="ph-fill ph-megaphone text-accent"></i> Issues I Reported (<span x-text="reported.length"></span>)
-      </h2>
-      <a href="report_issue.html" class="btn btn-secondary text-xs py-1.5 px-3">
-        <i class="ph-bold ph-plus"></i> New Report
+      <div class="flex items-center gap-2">
+        <i class="ph-fill ph-megaphone text-accent text-2xl"></i>
+        <h2 class="text-xl md:text-2xl font-extrabold text-ink leading-tight m-0">Issues I Reported (<span x-text="reported.length"></span>)</h2>
+      </div>
+      <a href="report_issue.html" class="btn btn-secondary text-xs py-1.5 px-3.5 inline-flex items-center gap-1.5 shadow-sm hover:border-accent">
+        <i class="ph-bold ph-plus text-accent"></i> New Report
       </a>
     </div>
     
     <div x-show="reported.length === 0" class="text-center py-8 text-muted bg-surface rounded-lg border border-border mb-8 border-dashed" style="display: none;">
       <i class="ph ph-file-dashed text-4xl mb-2"></i>
-      <p>You haven't reported any issues yet.</p>
+      <p class="m-0">You haven't reported any issues yet.</p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
@@ -309,29 +346,40 @@
                  :class="{'bg-status-open-text w-1/3': issue.status==='Open', 'bg-status-progress-text w-2/3': issue.status==='In Progress', 'bg-status-resolved-text w-full': issue.status==='Resolved'}"></div>
           </div>
           
-          <div class="flex justify-between items-start mb-3 mt-1">
+          <div class="flex justify-between items-start mb-3 mt-1 gap-2">
             <span class="badge" :class="{'badge-status-open': issue.status==='Open', 'badge-status-progress': issue.status==='In Progress', 'badge-status-resolved': issue.status==='Resolved'}" x-text="issue.status"></span>
-            <div class="text-sm font-bold font-mono text-ink" title="Impact Score">Score <span x-text="issue.score"></span></div>
+            <div class="text-sm font-bold font-mono text-ink inline-flex items-center gap-1" title="Impact Score">
+              <span class="text-xs text-muted font-normal">Score</span>
+              <span x-text="issue.score"></span>
+            </div>
           </div>
-          <h3 class="text-base font-bold text-ink mb-1 group-hover:text-accent transition-colors" x-text="issue.title"></h3>
-          <div class="text-xs text-muted mb-4"><i class="ph-fill ph-map-pin"></i> <span x-text="issue.location"></span></div>
+          <h3 class="text-base font-bold text-ink mb-1 group-hover:text-accent transition-colors leading-snug" x-text="issue.title"></h3>
+          <div class="text-xs text-muted mb-4 inline-flex items-center gap-1.5">
+            <i class="ph-fill ph-map-pin text-accent"></i>
+            <span x-text="issue.location"></span>
+          </div>
           
-          <div class="mt-auto pt-4 border-t border-bg text-sm">
-            <span x-show="issue.status !== 'Resolved'" class="text-muted"><i class="ph ph-clock"></i> Open for <span x-text="issue.daysOpen"></span> days</span>
-            <span x-show="issue.status === 'Resolved'" class="text-status-resolved-text font-bold"><i class="ph-bold ph-check"></i> Resolved</span>
+          <div class="mt-auto pt-4 border-t border-bg text-sm flex items-center justify-between">
+            <span x-show="issue.status !== 'Resolved'" class="text-muted inline-flex items-center gap-1.5">
+              <i class="ph ph-clock"></i> Open for <span x-text="issue.daysOpen"></span> days
+            </span>
+            <span x-show="issue.status === 'Resolved'" class="text-status-resolved-text font-bold inline-flex items-center gap-1.5">
+              <i class="ph-bold ph-check"></i> Resolved
+            </span>
           </div>
         </a>
       </template>
     </div>
 
     <!-- Issues I Support -->
-    <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-muted">
-      <i class="ph-fill ph-thumbs-up"></i> Issues I Support (<span x-text="supported.length"></span>)
-    </h2>
+    <div class="flex items-center gap-2 mb-4">
+      <i class="ph-fill ph-thumbs-up text-amber-500 text-2xl"></i>
+      <h2 class="text-xl md:text-2xl font-extrabold text-ink leading-tight m-0">Issues I Support (<span x-text="supported.length"></span>)</h2>
+    </div>
     
     <div x-show="supported.length === 0" class="text-center py-8 text-muted bg-surface rounded-lg border border-border border-dashed" style="display: none;">
       <i class="ph ph-users text-4xl mb-2"></i>
-      <p>You aren't supporting any issues yet.</p>
+      <p class="m-0">You aren't supporting any issues yet.</p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
@@ -342,17 +390,27 @@
                  :class="{'bg-status-open-text w-1/3': issue.status==='Open', 'bg-status-progress-text w-2/3': issue.status==='In Progress', 'bg-status-resolved-text w-full': issue.status==='Resolved'}"></div>
           </div>
           
-          <div class="flex justify-between items-start mb-3 mt-1">
+          <div class="flex justify-between items-start mb-3 mt-1 gap-2">
             <span class="badge" :class="{'badge-status-open': issue.status==='Open', 'badge-status-progress': issue.status==='In Progress', 'badge-status-resolved': issue.status==='Resolved'}" x-text="issue.status"></span>
-            <div class="text-sm font-bold font-mono text-muted" title="Impact Score">Score <span x-text="issue.score"></span></div>
+            <div class="text-sm font-bold font-mono text-muted inline-flex items-center gap-1" title="Impact Score">
+              <span class="text-xs font-normal">Score</span>
+              <span x-text="issue.score"></span>
+            </div>
           </div>
-          <h3 class="text-base font-bold text-ink mb-1 group-hover:text-accent transition-colors" x-text="issue.title"></h3>
-          <div class="text-xs text-muted mb-4">Reported by <span x-text="issue.reportedBy"></span></div>
+          <h3 class="text-base font-bold text-ink mb-1 group-hover:text-accent transition-colors leading-snug" x-text="issue.title"></h3>
+          <div class="text-xs text-muted mb-4 inline-flex items-center gap-1.5">
+            <i class="ph-bold ph-user text-muted"></i>
+            <span>Reported by <span class="font-medium text-ink" x-text="issue.reportedBy"></span></span>
+          </div>
           
-          <div class="mt-auto pt-4 border-t border-border text-sm flex justify-between">
-            <span x-show="issue.status !== 'Resolved'" class="text-muted"><i class="ph ph-clock"></i> Open for <span x-text="issue.daysOpen"></span> days</span>
-            <span x-show="issue.status === 'Resolved'" class="text-status-resolved-text font-bold"><i class="ph-bold ph-check"></i> Resolved</span>
-            <span class="text-accent font-bold text-xs bg-accent-soft px-2 py-1 rounded">Supported</span>
+          <div class="mt-auto pt-4 border-t border-border text-sm flex items-center justify-between">
+            <span x-show="issue.status !== 'Resolved'" class="text-muted inline-flex items-center gap-1.5">
+              <i class="ph ph-clock"></i> Open for <span x-text="issue.daysOpen"></span> days
+            </span>
+            <span x-show="issue.status === 'Resolved'" class="text-status-resolved-text font-bold inline-flex items-center gap-1.5">
+              <i class="ph-bold ph-check"></i> Resolved
+            </span>
+            <span class="text-accent font-bold text-xs bg-accent-soft px-2.5 py-1 rounded-full border border-accent/20">Supported</span>
           </div>
         </a>
       </template>
