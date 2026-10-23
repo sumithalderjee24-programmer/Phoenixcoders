@@ -498,6 +498,25 @@ document.addEventListener('alpine:init', () => {
       signature: null
     },
     isEditing: false,
+    showAvatarPicker: false,
+    presetAvatars: [
+      { id: 'av1', label: 'Tech Guy', url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&q=80' },
+      { id: 'av2', label: 'Scholar', url: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=256&q=80' },
+      { id: 'av3', label: 'Engineer', url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=256&q=80' },
+      { id: 'av4', label: 'Creator', url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=256&q=80' },
+      { id: 'av5', label: 'Student', url: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=256&q=80' },
+      { id: 'av6', label: 'Innovator', url: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=256&q=80' }
+    ],
+
+    selectPresetAvatar(url) {
+      this.user = { ...this.user, avatar: url };
+      this.saveProfile();
+      if (Alpine.store('auth')) {
+        Alpine.store('auth').save({ avatar: url });
+      }
+      this.showAvatarPicker = false;
+      window.dispatchEvent(new CustomEvent('toast', { detail: 'Avatar updated successfully!' }));
+    },
     allIssues: [],
 
     init() {
