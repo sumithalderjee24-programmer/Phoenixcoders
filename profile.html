@@ -9,7 +9,7 @@
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="js/app.js"></script>
 </head>
-<body>
+<body x-data="profileManager">
 
   <nav class="navbar" x-data="{ mobileMenuOpen: false }">
     <div class="container nav-content">
@@ -17,18 +17,28 @@
       <div class="nav-links">
         <a href="index.html" class="nav-link">Browse</a>
         <a href="report_issue.html" class="nav-link">Report an issue</a>
-        <a href="profile.html" class="nav-link" aria-current="page">Profile</a>
+        <a href="profile.html" class="nav-link font-bold text-ink" aria-current="page">Profile</a>
         <a href="login.html" class="nav-link">Log out</a>
-              <!-- Bright / Dark Mode Toggle (Sun / Moon) -->
+        <!-- Bright / Dark Mode Toggle (Sun / Moon) -->
         <button type="button" class="theme-toggle-btn" @click="$store.theme.toggle()" :title="$store.theme.mode === 'dark' ? 'Switch to Bright Mode' : 'Switch to Dark Mode'" aria-label="Toggle Bright / Dark mode">
           <i class="ph-bold" :class="$store.theme.mode === 'dark' ? 'ph-sun text-yellow-400' : 'ph-moon text-indigo-600'"></i>
         </button>
+        <!-- Circular Profile Image Logo (Top Right) -->
+        <a href="profile.html" class="nav-profile-pill" title="My Profile">
+          <template x-if="$store.auth && $store.auth.user.avatar">
+            <img :src="$store.auth.user.avatar" alt="Profile">
+          </template>
+          <template x-if="!$store.auth || !$store.auth.user.avatar">
+            <span class="avatar-fallback" x-text="$store.auth ? $store.auth.initials : 'HR'"></span>
+          </template>
+        </a>
       </div>
-        <button class="hamburger" @click="mobileMenuOpen = !mobileMenuOpen" aria-label="Toggle menu">
+      <button class="hamburger" @click="mobileMenuOpen = !mobileMenuOpen" aria-label="Toggle menu">
         <i class="ph ph-list"></i>
       </button>
     </div>
-    <div class="mobile-menu" x-show="mobileMenuOpen" style="display: none;">
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" x-show="mobileMenuOpen" x-transition.opacity style="display: none;">
       <div class="flex justify-between items-center mb-4">
         <div class="nav-brand"><i class="ph-fill ph-wrench"></i> CampusFix</div>
         <button class="hamburger" @click="mobileMenuOpen = false"><i class="ph ph-x"></i></button>
@@ -40,43 +50,46 @@
     </div>
   </nav>
 
-  <main class="container py-4" x-data="{
-    name: 'Hriddesh Roy',
-    major: 'Computer Science',
-    role: 'Student',
-    isEditing: false,
-    reported: mockIssues.filter(i => i.id === 3 || i.id === 6),
-    supported: mockIssues.filter(i => i.id === 2 || i.id === 4),
-    
-    get initials() {
-      return this.name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
-    },
-    
-    saveProfile() {
-      this.isEditing = false;
-    }
-  }">
+  <main class="container py-4">
     
     <!-- Profile Header -->
     <div class="bg-surface border border-border rounded-lg p-6 md:p-8 flex flex-col md:flex-row items-center md:items-start gap-6 mb-8 mt-4">
-      <div class="avatar flex-shrink-0" style="width: 80px; height: 80px; font-size: 2rem;" x-text="initials">HR</div>
+      
+      <!-- Profile Photo Upload -->
+      <div class="relative flex-shrink-0 text-center">
+        <template x-if="user.avatar">
+          <img :src="user.avatar" alt="Avatar" class="avatar object-cover border-2 border-accent" style="width: 90px; height: 90px; border-radius: 50%;">
+        </template>
+        <template x-if="!user.avatar">
+          <div class="avatar mx-auto" style="width: 90px; height: 90px; font-size: 2rem; border-radius: 50%;" x-text="initials">HR</div>
+        </template>
+        
+        <label class="btn btn-secondary text-xs mt-3 flex items-center justify-center gap-1 cursor-pointer">
+          <i class="ph-bold ph-camera"></i> Change Photo
+          <input type="file" accept="image/*" class="hidden" @change="handleFileUpload($event, 'avatar')">
+        </label>
+      </div>
+
       <div class="text-center md:text-left flex-grow w-full md:w-auto">
         
         <!-- View Mode -->
         <div x-show="!isEditing">
-          <h1 class="mb-1 text-2xl" x-text="name"></h1>
-          <p class="text-muted mb-4"><span x-text="role"></span> &bull; <span x-text="major"></span></p>
+          <h1 class="mb-1 text-2xl" x-text="user.name"></h1>
+          <p class="text-muted mb-4">
+            <span x-text="user.role"></span> &bull; <span x-text="user.major"></span> &bull; ID: <span class="font-mono font-bold text-ink" x-text="user.studentId"></span>
+          </p>
           <div class="flex flex-wrap justify-center md:justify-start gap-6">
-            <div><div class="text-xl font-bold font-mono text-ink">2</div><div class="text-xs uppercase tracking-wide text-muted font-bold">Reported</div></div>
-            <div><div class="text-xl font-bold font-mono text-ink">2</div><div class="text-xs uppercase tracking-wide text-muted font-bold">Supporting</div></div>
-            <div><div class="text-xl font-bold font-mono text-status-resolved-text">1</div><div class="text-xs uppercase tracking-wide text-muted font-bold">Resolved</div></div>
+            <div><div class="text-xl font-bold font-mono text-ink" x-text="reported.length"></div><div class="text-xs uppercase tracking-wide text-muted font-bold">Reported</div></div>
+            <div><div class="text-xl font-bold font-mono text-ink" x-text="supported.length"></div><div class="text-xs uppercase tracking-wide text-muted font-bold">Supporting</div></div>
+            <div><div class="text-xl font-bold font-mono text-status-resolved-text" x-text="resolvedCount"></div><div class="text-xs uppercase tracking-wide text-muted font-bold">Resolved</div></div>
           </div>
         </div>
 
         <!-- Edit Mode -->
         <div x-show="isEditing" style="display: none;" class="flex flex-col gap-3 max-w-sm mx-auto md:mx-0">
-          <input type="text" x-model="name" class="form-input text-lg font-bold" placeholder="Your Name">
-          <input type="text" x-model="major" class="form-input" placeholder="Your Major">
+          <input type="text" x-model="user.name" class="form-input text-lg font-bold" placeholder="Your Name">
+          <input type="text" x-model="user.major" class="form-input" placeholder="Your Major">
+          <input type="text" x-model="user.studentId" class="form-input" placeholder="Student ID">
           <div class="flex gap-2 mt-2 justify-center md:justify-start">
             <button @click="saveProfile" class="btn btn-primary py-1 px-4">Save</button>
             <button @click="isEditing = false" class="btn btn-ghost py-1 px-4">Cancel</button>
@@ -85,6 +98,59 @@
         
       </div>
       <button x-show="!isEditing" @click="isEditing = true" class="btn btn-secondary flex-shrink-0"><i class="ph ph-pencil-simple"></i> Edit Profile</button>
+    </div>
+
+    <!-- Compulsory Student ID & Signature Verification Section -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      
+      <!-- Student ID Card Upload (Compulsory) -->
+      <div class="bg-surface border border-border rounded-lg p-5">
+        <div class="flex justify-between items-center mb-2">
+          <h3 class="text-base font-bold flex items-center gap-2">
+            <i class="ph-bold ph-identification-card text-accent"></i> Campus Student ID Card
+            <span class="text-xs text-status-open-text font-bold">(Compulsory)</span>
+          </h3>
+          <span class="badge" :class="user.idCard ? 'badge-status-resolved' : 'badge-status-open'" x-text="user.idCard ? 'Verified' : 'Required'"></span>
+        </div>
+        <p class="text-xs text-muted mb-4">Upload a clear photo of your college identity card for verification.</p>
+        
+        <template x-if="user.idCard">
+          <div class="mb-3">
+            <img :src="user.idCard" alt="Student ID Card" class="w-full max-h-48 object-cover rounded border border-border">
+          </div>
+        </template>
+        
+        <label class="btn btn-secondary w-full text-xs flex items-center justify-center gap-2 cursor-pointer">
+          <i class="ph-bold ph-upload-simple"></i>
+          <span x-text="user.idCard ? 'Replace ID Card' : 'Upload Student ID Photo'"></span>
+          <input type="file" accept="image/*" class="hidden" @change="handleFileUpload($event, 'idCard')">
+        </label>
+      </div>
+
+      <!-- Signature Upload (Compulsory) -->
+      <div class="bg-surface border border-border rounded-lg p-5">
+        <div class="flex justify-between items-center mb-2">
+          <h3 class="text-base font-bold flex items-center gap-2">
+            <i class="ph-bold ph-pen-nib text-accent"></i> Official Signature
+            <span class="text-xs text-status-open-text font-bold">(Compulsory)</span>
+          </h3>
+          <span class="badge" :class="user.signature ? 'badge-status-resolved' : 'badge-status-open'" x-text="user.signature ? 'Verified' : 'Required'"></span>
+        </div>
+        <p class="text-xs text-muted mb-4">Upload your digital or handwritten signature to authorize complaints.</p>
+        
+        <template x-if="user.signature">
+          <div class="mb-3 bg-bg p-3 rounded text-center border border-dashed border-border">
+            <img :src="user.signature" alt="Official Signature" class="max-h-24 mx-auto object-contain">
+          </div>
+        </template>
+        
+        <label class="btn btn-secondary w-full text-xs flex items-center justify-center gap-2 cursor-pointer">
+          <i class="ph-bold ph-upload-simple"></i>
+          <span x-text="user.signature ? 'Replace Signature' : 'Upload Signature Image'"></span>
+          <input type="file" accept="image/*" class="hidden" @change="handleFileUpload($event, 'signature')">
+        </label>
+      </div>
+
     </div>
 
     <!-- Issues I Reported -->
@@ -112,7 +178,7 @@
           
           <div class="mt-auto pt-4 border-t border-bg text-sm">
             <span x-show="issue.status !== 'Resolved'" class="text-muted"><i class="ph ph-clock"></i> Open for <span x-text="issue.daysOpen"></span> days</span>
-            <span x-show="issue.status === 'Resolved'" class="text-status-resolved-text font-bold"><i class="ph-bold ph-check"></i> Resolved in 5 days</span>
+            <span x-show="issue.status === 'Resolved'" class="text-status-resolved-text font-bold"><i class="ph-bold ph-check"></i> Resolved</span>
           </div>
         </a>
       </template>
