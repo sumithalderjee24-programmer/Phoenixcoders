@@ -9,6 +9,7 @@
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="js/app.js"></script>
   <script src="js/bg-interactive.js"></script>
+  <script src="js/camera-modal.js"></script>
 </head>
 <body x-data="profileManager">
 
@@ -118,17 +119,20 @@
               </template>
             </div>
             
-            <div class="flex items-center gap-2 mt-2">
+            <div class="flex items-center gap-2 mt-2 flex-wrap">
               <label class="photo-badge-btn" title="Upload custom photo from device">
-                <i class="ph-bold ph-camera"></i> Upload
-                <input type="file" accept="image/*" class="hidden" @change="handleFileUpload(, 'avatar')">
+                <i class="ph-bold ph-upload-simple"></i> Upload
+                <input type="file" accept="image/*" class="hidden" @change="handleFileUpload($event, 'avatar')">
               </label>
+
+              <button type="button" class="photo-badge-btn" @click="openCameraCapture('avatar')" title="Take photo with live Camera / Webcam">
+                <i class="ph-bold ph-camera"></i> Camera
+              </button>
 
               <button type="button" class="photo-badge-btn" @click="showAvatarPicker = !showAvatarPicker" :class="{'border-accent text-accent': showAvatarPicker}" title="Choose from preset avatars">
                 <i class="ph-bold ph-user-circle"></i> Avatars
               </button>
             </div>
-
             <!-- Avatar Presets Dropdown Panel -->
             <div x-show="showAvatarPicker" x-transition.opacity @click.outside="showAvatarPicker = false" style="display: none;" class="mt-3 p-3 bg-surface border border-border rounded-lg shadow-lg flex flex-col gap-2 z-20">
               <div class="text-xs font-bold text-ink flex items-center justify-between">
@@ -278,11 +282,17 @@
           </div>
         </div>
 
-        <label class="btn btn-secondary w-full py-2.5 text-xs font-bold inline-flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:border-accent">
-          <i class="ph-bold ph-upload-simple"></i>
-          <span x-text="user.idCard ? 'Replace ID Card Photo' : 'Upload Student ID Photo'"></span>
-          <input type="file" accept="image/*" class="hidden" @change="handleFileUpload(, 'idCard')">
-        </label>
+        <div class="flex items-center gap-2 mt-3">
+          <label class="btn btn-secondary flex-1 py-2.5 text-xs font-bold inline-flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:border-accent">
+            <i class="ph-bold ph-upload-simple"></i>
+            <span x-text="user.idCard ? 'Upload File' : 'Upload File'"></span>
+            <input type="file" accept="image/*" class="hidden" @change="handleFileUpload($event, 'idCard')">
+          </label>
+          <button type="button" @click="openCameraCapture('idCard')" class="btn btn-primary py-2.5 px-4 text-xs font-bold inline-flex items-center justify-center gap-1.5 shadow-sm">
+            <i class="ph-bold ph-camera"></i>
+            <span>Camera</span>
+          </button>
+        </div>
       </div>
 
       <!-- Signature Upload (Compulsory) -->
@@ -314,11 +324,17 @@
           </div>
         </div>
 
-        <label class="btn btn-secondary w-full py-2.5 text-xs font-bold inline-flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:border-accent">
-          <i class="ph-bold ph-upload-simple"></i>
-          <span x-text="user.signature ? 'Replace Signature Image' : 'Upload Signature Image'"></span>
-          <input type="file" accept="image/*" class="hidden" @change="handleFileUpload(, 'signature')">
-        </label>
+        <div class="flex items-center gap-2 mt-3">
+          <label class="btn btn-secondary flex-1 py-2.5 text-xs font-bold inline-flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:border-accent">
+            <i class="ph-bold ph-upload-simple"></i>
+            <span x-text="user.signature ? 'Upload File' : 'Upload File'"></span>
+            <input type="file" accept="image/*" class="hidden" @change="handleFileUpload($event, 'signature')">
+          </label>
+          <button type="button" @click="openCameraCapture('signature')" class="btn btn-primary py-2.5 px-4 text-xs font-bold inline-flex items-center justify-center gap-1.5 shadow-sm">
+            <i class="ph-bold ph-camera"></i>
+            <span>Camera</span>
+          </button>
+        </div>
       </div>
 
     </div>
