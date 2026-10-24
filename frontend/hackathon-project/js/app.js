@@ -363,6 +363,18 @@ document.addEventListener('alpine:init', () => {
       };
       reader.readAsDataURL(file);
     },
+
+    openCameraCapture() {
+      if (window.CampusFixCamera) {
+        window.CampusFixCamera.open((dataUrl) => {
+          this.imagePreview = dataUrl;
+          this.imageError = '';
+          window.dispatchEvent(new CustomEvent('toast', { detail: 'Photo captured from camera!' }));
+        }, 'environment');
+      } else {
+        alert('Camera component is loading, please try again.');
+      }
+    },
     
     validate() {
       this.errors = {};
@@ -575,6 +587,23 @@ document.addEventListener('alpine:init', () => {
         window.dispatchEvent(new CustomEvent('toast', { detail: `${label} uploaded successfully!` }));
       };
       reader.readAsDataURL(file);
+    },
+
+    openCameraCapture(type) {
+      if (window.CampusFixCamera) {
+        const defaultFacing = type === 'avatar' ? 'user' : 'environment';
+        window.CampusFixCamera.open((dataUrl) => {
+          this.user = { ...this.user, [type]: dataUrl };
+          this.saveProfile();
+          if (Alpine.store('auth')) {
+            Alpine.store('auth').save({ [type]: dataUrl });
+          }
+          const label = type === 'avatar' ? 'Profile Photo' : (type === 'idCard' ? 'Student ID Card' : 'Signature');
+          window.dispatchEvent(new CustomEvent('toast', { detail: `${label} captured via camera!` }));
+        }, defaultFacing);
+      } else {
+        alert('Camera component is loading, please try again.');
+      }
     },
 
     saveProfile() {

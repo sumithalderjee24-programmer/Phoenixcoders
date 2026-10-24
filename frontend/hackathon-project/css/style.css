@@ -1448,3 +1448,106 @@ input, textarea, select { font-family: inherit; }
 [data-theme="dark"] .hero-stat-card {
   background: rgba(24, 27, 35, 0.85);
 }
+
+/* ==========================================================================
+   CAMERA & WEBCAM MODAL & CONTROLS
+   ========================================================================== */
+.cf-camera-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 17, 23, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: fadeInModal 0.25s ease-out forwards;
+}
+
+@keyframes fadeInModal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.cf-camera-modal-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 580px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  animation: scaleUpModal 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes scaleUpModal {
+  from { transform: scale(0.94) translateY(12px); opacity: 0; }
+  to { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.cf-camera-view-container {
+  position: relative;
+  width: 100%;
+  height: 340px;
+  background: #090A0F;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.cf-camera-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cf-camera-canvas {
+  display: none;
+}
+
+.cf-camera-overlay-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border: 2px dashed rgba(255, 255, 255, 0.25);
+  margin: 18px;
+  border-radius: var(--radius-md);
+  box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.12);
+}
+
+.cf-camera-btn-record {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #EF4444;
+  border: 4px solid #FFFFFF;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.5rem;
+}
+
+.cf-camera-btn-record:hover {
+  transform: scale(1.08);
+  background: #DC2626;
+}
+
+.cf-camera-btn-record:active {
+  transform: scale(0.94);
+}
+
+.photo-input-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
