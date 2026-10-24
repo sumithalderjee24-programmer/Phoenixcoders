@@ -98,13 +98,39 @@
   <!-- Hero Strip -->
   <section class="section" style="padding-top: var(--space-6); padding-bottom: var(--space-6); background: var(--surface); border-bottom: 1px solid var(--border);">
     <div class="container">
-      <h1 class="mb-4">What's broken on campus?</h1>
-      <div class="flex flex-wrap gap-6 mb-6">
-        <div><span class="font-bold text-ink" style="font-family: var(--font-mono); font-size: 1.25rem;">4</span> <span class="text-muted text-sm">Issues Open</span></div>
-        <div><span class="font-bold text-ink" style="font-family: var(--font-mono); font-size: 1.25rem;">56</span> <span class="text-muted text-sm">Students Affected</span></div>
-        <div><span class="font-bold text-ink" style="font-family: var(--font-mono); font-size: 1.25rem;">12</span> <span class="text-muted text-sm">Resolved this month</span></div>
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <div>
+          <h1 class="text-3xl md:text-4xl font-extrabold text-ink mb-2">What's broken on campus?</h1>
+          <p class="text-muted text-sm m-0">Live community feed ranked by student impact score.</p>
+        </div>
+        <a href="report_issue.html" class="btn btn-primary self-start md:self-auto shadow-md">
+          <i class="ph-bold ph-plus-circle text-lg"></i> Report an Issue
+        </a>
       </div>
-      
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <div class="hero-stat-card stat-1">
+          <div class="hero-stat-icon"><i class="ph-bold ph-warning-circle"></i></div>
+          <div>
+            <div class="text-2xl font-mono font-bold text-ink leading-tight">4</div>
+            <div class="text-xs text-muted font-bold uppercase tracking-wider">Issues Open</div>
+          </div>
+        </div>
+        <div class="hero-stat-card stat-2">
+          <div class="hero-stat-icon"><i class="ph-bold ph-users-three"></i></div>
+          <div>
+            <div class="text-2xl font-mono font-bold text-ink leading-tight">56</div>
+            <div class="text-xs text-muted font-bold uppercase tracking-wider">Students Affected</div>
+          </div>
+        </div>
+        <div class="hero-stat-card stat-3">
+          <div class="hero-stat-icon"><i class="ph-bold ph-check-circle"></i></div>
+          <div>
+            <div class="text-2xl font-mono font-bold text-ink leading-tight">12</div>
+            <div class="text-xs text-muted font-bold uppercase tracking-wider">Resolved this month</div>
+          </div>
+        </div>
+      </div>
       <!-- Filter Bar -->
       <div class="filter-bar">
         <div class="relative flex-grow">
