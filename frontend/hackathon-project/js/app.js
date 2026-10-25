@@ -793,6 +793,15 @@ document.addEventListener('alpine:init', () => {
       }
     },
 
+    autoFillOtp() {
+      if (!this.generatedOtp) return;
+      for (let i = 0; i < 6; i++) {
+        this.enteredOtp[i] = this.generatedOtp[i] || '';
+      }
+      window.dispatchEvent(new CustomEvent('toast', { detail: 'Code auto-filled!' }));
+      this.verifyAndLogin();
+    },
+
     handleOtpPaste(event) {
       event.preventDefault();
       const paste = (event.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '');
