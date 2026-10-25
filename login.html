@@ -155,21 +155,20 @@
               </div>
             </div>
 
-            <!-- Password Field -->
+            <!-- Password Field with Perfect In-Box Eye Toggle -->
             <div class="form-group mb-0">
               <div class="flex items-center justify-between mb-1.5">
                 <label class="form-label mb-0 text-xs font-bold uppercase tracking-wider text-muted">Password</label>
                 <a href="#" @click.prevent="alert('A password reset link has been dispatched to ' + (email || 'your email'))" class="text-xs text-accent font-semibold hover:underline">Forgot password?</a>
               </div>
               <div class="modern-input-wrapper">
-                <input :type="showPassword ? 'text' : 'password'" x-model="password" required class="modern-input-field" placeholder="Enter your password" autocomplete="current-password" style="padding-right: 44px;">
+                <input :type="showPassword ? 'text' : 'password'" x-model="password" required class="modern-input-field" placeholder="Enter your password" autocomplete="current-password" style="padding-right: 48px;">
                 <i class="ph-bold ph-lock-key modern-input-icon"></i>
-                <button type="button" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted hover:text-ink text-lg" @click="showPassword = !showPassword" aria-label="Toggle password visibility">
-                  <i class="ph" :class="showPassword ? 'ph-eye-slash' : 'ph-eye'"></i>
+                <button type="button" class="btn-password-toggle" @click="showPassword = !showPassword" aria-label="Toggle password visibility">
+                  <i class="ph-bold" :class="showPassword ? 'ph-eye-slash' : 'ph-eye'"></i>
                 </button>
               </div>
             </div>
-
             <!-- Modern Gradient Glow Submit Button -->
             <button type="submit" class="btn-modern-glow mt-2" :disabled="isSubmitting">
               <span x-show="!isSubmitting" class="flex items-center gap-2">
@@ -211,17 +210,29 @@
             Enter the 6-digit confirmation code dispatched to <strong class="text-ink font-mono" x-text="email"></strong>.
           </p>
 
-          <!-- Simulated Email Mailbox Alert Banner -->
-          <div class="simulated-mail-banner">
-            <div class="flex items-start gap-2.5">
-              <i class="ph-fill ph-envelope-open text-accent text-lg mt-0.5"></i>
-              <div class="text-xs">
-                <div class="font-bold text-ink">Campus Security Email Inbox</div>
-                <div class="text-muted mt-0.5">Subject: Your Login Verification OTP is <span class="otp-badge-pill" x-text="generatedOtp"></span></div>
+          <!-- Prominent Interactive Email Dispatch Notice & Code Display -->
+          <div class="simulated-mail-banner p-4 bg-gradient-to-r from-indigo-50 to-purple-50 border border-indigo-200 rounded-xl mb-4 shadow-sm">
+            <div class="flex items-start gap-3">
+              <div class="w-9 h-9 rounded-full bg-accent/15 text-accent flex items-center justify-center flex-shrink-0 mt-0.5">
+                <i class="ph-fill ph-envelope-open text-xl"></i>
+              </div>
+              <div class="flex-grow min-w-0">
+                <div class="flex items-center justify-between gap-2 flex-wrap">
+                  <span class="text-xs font-bold text-ink uppercase tracking-wider">Email Dispatch Notification</span>
+                  <span class="text-[11px] font-mono text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-semibold">Sent to <span x-text="email"></span></span>
+                </div>
+                <div class="text-xs text-muted mt-1 leading-relaxed">
+                  Your one-time security authentication code is:
+                </div>
+                <div class="flex items-center gap-3 mt-2">
+                  <div class="otp-badge-pill text-lg font-mono font-bold tracking-widest px-3 py-1 bg-accent text-white rounded-lg shadow-sm" x-text="generatedOtp"></div>
+                  <button type="button" @click="autoFillOtp()" class="btn btn-secondary text-xs py-1 px-2.5 inline-flex items-center gap-1 hover:border-accent">
+                    <i class="ph-bold ph-copy"></i> Auto-fill code
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-
           <!-- Error Alert Banner -->
           <div x-show="error" class="bg-status-open-bg text-status-open-text p-3 rounded-xl mb-4 text-xs font-semibold flex items-center gap-2 border border-amber-500/20 shadow-sm" style="display:none;">
             <i class="ph-bold ph-warning-circle text-base flex-shrink-0"></i>

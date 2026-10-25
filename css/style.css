@@ -2110,3 +2110,33 @@ input, textarea, select { font-family: inherit; }
 .btn-modern-glow:active {
   transform: translateY(0);
 }
+
+/* Explicit Password Visibility Eye Button Positioning within Input Box */
+.btn-password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 1.25rem;
+  line-height: 1;
+  border-radius: 4px;
+  z-index: 5;
+  transition: color 0.2s ease;
+}
+
+.btn-password-toggle:hover {
+  color: var(--ink);
+}
+
+.btn-password-toggle:focus {
+  outline: none;
+  color: var(--accent);
+}
