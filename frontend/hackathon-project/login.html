@@ -7,11 +7,12 @@
   <link rel="stylesheet" href="css/style.css">
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="js/app.js"></script>
   <script src="js/bg-interactive.js"></script>
   <script src="js/camera-modal.js"></script>
 </head>
 <body class="bg-surface">
-  <div class="auth-layout" x-data="{ error: false, showPassword: false }">
+  <div class="auth-layout" x-data="authLogin">
     
     <!-- Brand Panel (Desktop only) -->
     <div class="auth-panel-left">
@@ -29,24 +30,24 @@
           
           <div class="flex flex-col gap-6">
             <div class="flex items-start gap-4">
+              <div class="bg-white/10 p-3 rounded-lg"><i class="ph-bold ph-shield-check text-xl text-accent"></i></div>
+              <div>
+                <h3 class="text-base font-bold mb-1">Two-Factor Authentication</h3>
+                <p class="text-sm text-gray-400">Secure email-verified OTP confirmation for every campus login.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="bg-white/10 p-3 rounded-lg"><i class="ph-bold ph-google-logo text-xl text-red-400"></i></div>
+              <div>
+                <h3 class="text-base font-bold mb-1">Google Single Sign-On</h3>
+                <p class="text-sm text-gray-400">Sign in with Google, verified instantly via authenticated email token.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
               <div class="bg-white/10 p-3 rounded-lg"><i class="ph-bold ph-sort-descending text-xl"></i></div>
               <div>
                 <h3 class="text-base font-bold mb-1">Ranked by impact</h3>
                 <p class="text-sm text-gray-400">Issues are prioritised by community votes, severity, and time waiting.</p>
-              </div>
-            </div>
-            <div class="flex items-start gap-4">
-              <div class="bg-white/10 p-3 rounded-lg"><i class="ph-bold ph-copy text-xl"></i></div>
-              <div>
-                <h3 class="text-base font-bold mb-1">Duplicates caught early</h3>
-                <p class="text-sm text-gray-400">Smart matching guides students to support existing issues instead of filing new ones.</p>
-              </div>
-            </div>
-            <div class="flex items-start gap-4">
-              <div class="bg-white/10 p-3 rounded-lg"><i class="ph-bold ph-eye text-xl"></i></div>
-              <div>
-                <h3 class="text-base font-bold mb-1">Every status public</h3>
-                <p class="text-sm text-gray-400">Full visibility into who reported what, and when the admin last responded.</p>
               </div>
             </div>
           </div>
@@ -56,11 +57,11 @@
       </div>
     </div>
 
-    <!-- Login Form -->
+    <!-- Login Form & OTP Verification Panel -->
     <div class="auth-panel-right">
       <div class="w-full">
         <!-- Mobile header -->
-        <div class="md:hidden flex items-center gap-2 font-heading font-bold text-xl mb-8 text-ink">
+        <div class="md:hidden flex items-center gap-2 font-heading font-bold text-xl mb-6 text-ink">
           <i class="ph-fill ph-wrench text-accent"></i> CampusFix
         </div>
 
@@ -68,38 +69,146 @@
           <i class="ph-fill ph-check-circle text-lg"></i> Account created successfully. Please log in.
         </div>
 
-        <h2 class="mb-2">Welcome back</h2>
-        <p class="text-muted mb-8">Log in with your university credentials.</p>
+        <!-- ================= STEP 1: CREDENTIALS & GOOGLE LOGIN ================= -->
+        <div x-show="step === 'credentials'" x-transition.opacity>
+          <h2 class="text-2xl md:text-3xl font-extrabold text-ink mb-1.5">Welcome back</h2>
+          <p class="text-muted text-sm mb-6">Log in with verified email credentials or your Google account.</p>
 
-        <form @submit.prevent="error = true" class="flex flex-col gap-5">
-          <div class="form-group mb-0" :class="{'has-error': error}">
-            <label class="form-label">Email address</label>
-            <input type="email" required class="form-input" placeholder="student@university.edu" autocomplete="email">
+          <!-- Error Alert Banner -->
+          <div x-show="error" class="bg-status-open-bg text-status-open-text p-3 rounded-md mb-4 text-xs font-semibold flex items-center gap-2" style="display:none;">
+            <i class="ph-bold ph-warning-circle text-base flex-shrink-0"></i>
+            <span x-text="error"></span>
           </div>
 
-          <div class="form-group mb-0 relative" :class="{'has-error': error}">
-            <label class="form-label">Password</label>
-            <div class="relative">
-              <input :type="showPassword ? 'text' : 'password'" required class="form-input" placeholder="Enter password" autocomplete="current-password" style="padding-right: 40px;">
-              <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-ink" @click="showPassword = !showPassword" aria-label="Toggle password visibility">
-                <i class="ph" :class="showPassword ? 'ph-eye-slash' : 'ph-eye'"></i>
-              </button>
+          <!-- Google Sign-In Button -->
+          <button type="button" @click="startGoogleLogin()" class="btn-google mb-4">
+            <svg width="20" height="20" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/>
+              <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.35 24 12 24z"/>
+              <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+              <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.35 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+            </svg>
+            <span>Continue with Google</span>
+          </button>
+
+          <div class="auth-divider">Or log in with email</div>
+
+          <!-- Email & Password Form -->
+          <form @submit.prevent="sendCredentials()" class="flex flex-col gap-4">
+            <div class="form-group mb-0" :class="{'has-error': error && error.includes('email')}">
+              <label class="form-label text-xs font-bold uppercase tracking-wider text-muted">Email address</label>
+              <input type="email" x-model="email" required class="form-input" placeholder="student@university.edu" autocomplete="email">
             </div>
-            <div class="form-error-msg mt-1"><i class="ph-bold ph-warning-circle"></i> Invalid email or password.</div>
+
+            <div class="form-group mb-0 relative" :class="{'has-error': error && error.includes('Password')}">
+              <div class="flex items-center justify-between mb-1.5">
+                <label class="form-label mb-0 text-xs font-bold uppercase tracking-wider text-muted">Password</label>
+                <a href="#" @click.prevent="alert('Password reset link has been dispatched to your email.')" class="text-xs text-accent hover:underline">Forgot password?</a>
+              </div>
+              <div class="relative">
+                <input :type="showPassword ? 'text' : 'password'" x-model="password" required class="form-input" placeholder="Enter your password" autocomplete="current-password" style="padding-right: 40px;">
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-ink" @click="showPassword = !showPassword" aria-label="Toggle password visibility">
+                  <i class="ph" :class="showPassword ? 'ph-eye-slash' : 'ph-eye'"></i>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-full py-3 mt-2 text-base font-bold flex items-center justify-center gap-2" :disabled="isSubmitting">
+              <span x-show="!isSubmitting">Log in & Send Email OTP &rarr;</span>
+              <span x-show="isSubmitting" style="display:none;"><i class="ph-bold ph-spinner animate-spin"></i> Dispatching OTP...</span>
+            </button>
+          </form>
+
+          <div class="mt-6 text-center text-sm">
+            <span class="text-muted">Don't have an account?</span> <a href="register.html" class="font-bold text-accent hover:underline">Create account</a>
+          </div>
+          
+          <div class="mt-8 text-center">
+            <a href="admin_dashboard.html" class="text-xs font-bold text-muted border border-border px-3 py-1.5 rounded-full hover:bg-bg transition-colors inline-flex items-center gap-1.5">
+              <i class="ph-bold ph-lock-key"></i> Sign in as admin (demo)
+            </a>
+          </div>
+        </div>
+
+        <!-- ================= STEP 2: EMAIL OTP VERIFICATION ================= -->
+        <div x-show="step === 'otp'" x-transition.opacity style="display:none;">
+          <div class="flex items-center gap-2 text-accent mb-2">
+            <i class="ph-fill ph-envelope-simple text-2xl"></i>
+            <span class="text-xs font-bold uppercase tracking-wider">Email Two-Factor Security</span>
           </div>
 
-          <button type="button" @click="window.location.href='index.html'" class="btn btn-primary w-full py-3 mt-4 text-base">Log in as Student</button>
-        </form>
+          <h2 class="text-2xl md:text-3xl font-extrabold text-ink mb-1">Verify Your Identity</h2>
+          <p class="text-sm text-muted mb-4">
+            We sent a 6-digit confirmation OTP code to <strong class="text-ink font-mono" x-text="email"></strong>.
+          </p>
 
-        <div class="mt-8 text-center text-sm">
-          <span class="text-muted">Don't have an account?</span> <a href="register.html" class="font-bold text-accent hover:underline">Create account</a>
+          <!-- Simulated Live Inbox Notification Banner -->
+          <div class="simulated-mail-banner">
+            <div class="flex items-start gap-2.5">
+              <i class="ph-fill ph-envelope-open text-accent text-lg mt-0.5"></i>
+              <div class="text-xs">
+                <div class="font-bold text-ink">CampusFix Security Mailbox</div>
+                <div class="text-muted mt-0.5">Subject: Your Login Verification OTP is <span class="otp-badge-pill" x-text="generatedOtp"></span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Error Alert Banner -->
+          <div x-show="error" class="bg-status-open-bg text-status-open-text p-3 rounded-md mb-4 text-xs font-semibold flex items-center gap-2" style="display:none;">
+            <i class="ph-bold ph-warning-circle text-base flex-shrink-0"></i>
+            <span x-text="error"></span>
+          </div>
+
+          <!-- 6-Digit OTP Input Grid -->
+          <label class="form-label text-xs font-bold uppercase tracking-wider text-muted">Enter 6-Digit OTP</label>
+          <div class="otp-inputs-grid" @paste="handleOtpPaste($event)">
+            <template x-for="(digit, idx) in enteredOtp" :key="idx">
+              <input type="text" 
+                     :id="`otp-${idx}`"
+                     maxlength="1" 
+                     inputmode="numeric" 
+                     class="otp-digit-input"
+                     :value="digit"
+                     @input="handleOtpInput(idx, $event)"
+                     @keydown="handleOtpKeyDown(idx, $event)">
+            </template>
+          </div>
+
+          <!-- Resend Countdown -->
+          <div class="flex items-center justify-between text-xs text-muted mb-5">
+            <span>Didn't receive code?</span>
+            <button type="button" @click="resendOtp()" class="font-bold text-accent hover:underline disabled:opacity-50 disabled:cursor-not-allowed" :disabled="timer > 0">
+              <span x-show="timer > 0">Resend in <span class="font-mono" x-text="timer"></span>s</span>
+              <span x-show="timer === 0">Resend OTP Now</span>
+            </button>
+          </div>
+
+          <!-- Confirm & Login Button -->
+          <button type="button" @click="verifyAndLogin()" class="btn btn-primary w-full py-3 text-base font-bold flex items-center justify-center gap-2" :disabled="isSubmitting">
+            <span x-show="!isSubmitting"><i class="ph-bold ph-check-circle"></i> Confirm OTP & Enter CampusFix</span>
+            <span x-show="isSubmitting" style="display:none;"><i class="ph-bold ph-spinner animate-spin"></i> Authenticating...</span>
+          </button>
+
+          <!-- Back to credentials link -->
+          <div class="mt-4 text-center">
+            <button type="button" @click="step = 'credentials'; error = ''" class="btn btn-ghost text-xs text-muted hover:text-ink">
+              &larr; Back to login with different email
+            </button>
+          </div>
         </div>
-        
-        <div class="mt-12 text-center">
-          <a href="admin_dashboard.html" class="text-xs font-bold text-muted border border-border px-3 py-1 rounded-pill hover:bg-bg transition-colors">Sign in as admin (demo)</a>
-        </div>
+
       </div>
     </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div x-data="toastManager" class="toast-container">
+    <template x-for="toast in toasts" :key="toast.id">
+      <div class="toast animate-fade-in">
+        <i class="ph-fill ph-check-circle text-accent"></i>
+        <span x-text="toast.msg"></span>
+      </div>
+    </template>
   </div>
 </body>
 </html>
