@@ -1551,3 +1551,146 @@ input, textarea, select { font-family: inherit; }
   gap: 0.5rem;
   flex-wrap: wrap;
 }
+
+/* ==========================================================================
+   BRIGHT AI GENERATED CAMPUS BACKGROUND & ULTRA-MODERN GLASS TRANSPARENCY
+   ========================================================================== */
+
+/* Enhanced Bright AI-Generated Futuristic Campus Background */
+.cf-bg-campus-layer {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 90% 15%, rgba(236, 72, 153, 0.14) 0%, transparent 45%),
+    radial-gradient(circle at 50% 85%, rgba(14, 165, 233, 0.12) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72) 0%, rgba(250, 248, 245, 0.82) 50%, rgba(245, 243, 255, 0.88) 100%),
+    url('https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=2160&q=85');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  opacity: 0.65;
+  mix-blend-mode: normal;
+  transition: all 0.4s ease;
+}
+
+[data-theme="dark"] .cf-bg-campus-layer {
+  background-image: 
+    radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.25) 0%, transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.2) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(15, 17, 23, 0.82) 0%, rgba(17, 24, 39, 0.90) 100%),
+    url('https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=2160&q=85');
+  opacity: 0.38;
+  mix-blend-mode: screen;
+}
+
+/* Translucent Glassmorphism Cards System across the entire website */
+.issue-card,
+.issue-card-preview,
+.profile-hero-card,
+.verification-card,
+.hero-stat-card,
+.admin-card,
+.stat-card,
+.profile-stat-box,
+.filter-bar,
+.admin-table-container,
+.auth-panel-right {
+  background: rgba(255, 255, 255, 0.72) !important;
+  backdrop-filter: blur(16px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(160%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.75) !important;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(255, 255, 255, 0.4) inset !important;
+}
+
+[data-theme="dark"] .issue-card,
+[data-theme="dark"] .issue-card-preview,
+[data-theme="dark"] .profile-hero-card,
+[data-theme="dark"] .verification-card,
+[data-theme="dark"] .hero-stat-card,
+[data-theme="dark"] .admin-card,
+[data-theme="dark"] .stat-card,
+[data-theme="dark"] .profile-stat-box,
+[data-theme="dark"] .filter-bar,
+[data-theme="dark"] .admin-table-container,
+[data-theme="dark"] .auth-panel-right {
+  background: rgba(24, 27, 35, 0.68) !important;
+  backdrop-filter: blur(18px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 12px 36px -6px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.05) inset !important;
+}
+
+/* Hover elevation with glass refraction */
+.issue-card:hover,
+.hero-stat-card:hover,
+.verification-card:hover {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-color: rgba(99, 102, 241, 0.4) !important;
+  box-shadow: 0 20px 40px -10px rgba(79, 70, 229, 0.18), 0 0 0 1px rgba(99, 102, 241, 0.25) inset !important;
+}
+
+[data-theme="dark"] .issue-card:hover,
+[data-theme="dark"] .hero-stat-card:hover,
+[data-theme="dark"] .verification-card:hover {
+  background: rgba(30, 34, 46, 0.78) !important;
+  border-color: rgba(129, 140, 248, 0.4) !important;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(129, 140, 248, 0.25) inset !important;
+}
+
+/* Translucent Navbar & Hero Section */
+.navbar {
+  background: rgba(255, 255, 255, 0.75) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+
+[data-theme="dark"] .navbar {
+  background: rgba(15, 17, 23, 0.75) !important;
+}
+
+.hero-strip-section {
+  background: rgba(255, 255, 255, 0.55) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.6) !important;
+}
+
+[data-theme="dark"] .hero-strip-section {
+  background: rgba(15, 17, 23, 0.6) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Form containers and panels transparency */
+.filter-search,
+.filter-select {
+  background: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+[data-theme="dark"] .filter-search,
+[data-theme="dark"] .filter-select {
+  background: rgba(17, 24, 39, 0.75) !important;
+}
+
+.upload-zone {
+  background: rgba(255, 255, 255, 0.55) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+[data-theme="dark"] .upload-zone {
+  background: rgba(24, 27, 35, 0.55) !important;
+}
+
+/* Transparent CTA Box */
+.cta-banner-box {
+  background: rgba(238, 242, 255, 0.7) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(99, 102, 241, 0.3) !important;
+}
+
+[data-theme="dark"] .cta-banner-box {
+  background: rgba(30, 27, 75, 0.5) !important;
+  border-color: rgba(99, 102, 241, 0.35) !important;
+}
