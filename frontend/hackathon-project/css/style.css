@@ -1898,3 +1898,215 @@ input, textarea, select { font-family: inherit; }
   color: #FFFFFF;
   flex-shrink: 0;
 }
+
+/* ==========================================================================
+   NEXT-GEN MODERN INTERACTIVE ANIMATED AUTH PAGE
+   ========================================================================== */
+
+.modern-auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  position: relative;
+  z-index: 10;
+}
+
+.modern-auth-container {
+  width: 100%;
+  max-width: 1100px;
+  min-height: 680px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 28px;
+  box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+  display: grid;
+  grid-template-columns: 1fr;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.4s ease;
+}
+
+@media (min-width: 900px) {
+  .modern-auth-container {
+    grid-template-columns: 1.15fr 1fr;
+  }
+}
+
+[data-theme="dark"] .modern-auth-container {
+  background: rgba(20, 23, 31, 0.75);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 35px 80px -15px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+}
+
+/* Left Showcase Side (Interactive animated graphics & live metrics) */
+.modern-auth-showcase {
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.94) 0%, rgba(124, 58, 237, 0.90) 50%, rgba(219, 39, 119, 0.88) 100%),
+              url('https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1400&q=85');
+  background-size: cover;
+  background-position: center;
+  padding: 3rem;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.modern-auth-showcase::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.2) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(245, 158, 11, 0.25) 0%, transparent 45%);
+  pointer-events: none;
+}
+
+/* Floating interactive glass status cards on showcase */
+.floating-glass-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 18px;
+  padding: 1.1rem 1.35rem;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  user-select: none;
+}
+
+.floating-glass-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.28);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.pulse-indicator-ring {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #10B981;
+}
+
+.pulse-indicator-ring::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid #10B981;
+  animation: pulseRing 1.8s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+}
+
+@keyframes pulseRing {
+  0% { transform: scale(0.6); opacity: 1; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+/* Right Form Side */
+.modern-auth-form-pane {
+  padding: 3rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+@media (max-width: 640px) {
+  .modern-auth-form-pane {
+    padding: 2rem 1.5rem;
+  }
+  .modern-auth-showcase {
+    display: none;
+  }
+}
+
+/* Modern Input Focus Rings with dynamic icons */
+.modern-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.modern-input-icon {
+  position: absolute;
+  left: 14px;
+  color: var(--muted);
+  font-size: 1.25rem;
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.modern-input-field {
+  width: 100%;
+  padding: 0.85rem 1rem 0.85rem 2.85rem;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--ink);
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+}
+
+[data-theme="dark"] .modern-input-field {
+  background: rgba(26, 30, 42, 0.8);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+}
+
+.modern-input-field:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: #FFFFFF;
+  box-shadow: 0 0 0 4px var(--accent-soft), 0 4px 14px rgba(79, 70, 229, 0.12);
+}
+
+[data-theme="dark"] .modern-input-field:focus {
+  background: #181B23;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.25);
+}
+
+.modern-input-field:focus + .modern-input-icon,
+.modern-input-wrapper:focus-within .modern-input-icon {
+  color: var(--accent);
+}
+
+/* Gradient Shimmer Submit Button */
+.btn-modern-glow {
+  width: 100%;
+  padding: 0.95rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+  color: #FFFFFF;
+  background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #EC4899 100%);
+  background-size: 200% 200%;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.45);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+}
+
+.btn-modern-glow:hover {
+  transform: translateY(-2px);
+  background-position: right center;
+  box-shadow: 0 16px 32px -6px rgba(124, 58, 237, 0.55);
+}
+
+.btn-modern-glow:active {
+  transform: translateY(0);
+}
