@@ -620,12 +620,16 @@ document.addEventListener('alpine:init', () => {
   }));
 
   // Authentication & OTP Verification Manager
+  // Authentication & OTP Verification Manager with Google Account Chooser
   Alpine.data('authLogin', () => ({
     step: 'credentials', // 'credentials' | 'otp'
     loginMethod: 'email', // 'email' | 'google'
     email: 'student@university.edu',
     password: '',
     showPassword: false,
+    showGoogleModal: false,
+    showCustomGoogleInput: false,
+    customGoogleEmail: '',
     error: '',
     infoMsg: '',
     generatedOtp: '',
@@ -633,6 +637,30 @@ document.addEventListener('alpine:init', () => {
     timer: 60,
     timerInterval: null,
     isSubmitting: false,
+
+    // Google accounts found on device / profile
+    googleAccounts: [
+      {
+        name: 'Hriddesh Roy',
+        email: 'hriddesh.roy@university.edu',
+        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=128&q=80',
+        badge: 'University Account'
+      },
+      {
+        name: 'Hriddesh Roy (Personal)',
+        email: 'hriddesh.roy2026@gmail.com',
+        avatar: '',
+        initial: 'H',
+        bg: '#4285F4',
+        badge: 'Personal'
+      },
+      {
+        name: 'Campus IT Samurai Team',
+        email: 'phoenixcoders.campus@gmail.com',
+        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=128&q=80',
+        badge: 'Developer Group'
+      }
+    ],
 
     get combinedOtp() {
       return this.enteredOtp.join('');
@@ -669,17 +697,42 @@ document.addEventListener('alpine:init', () => {
       this.dispatchOtpEmail(this.email);
     },
 
-    startGoogleLogin() {
+    openGoogleChooser() {
       this.error = '';
-      const promptEmail = prompt('Sign in with Google Account:\nEnter your Google Email ID:', this.email || 'student@gmail.com');
-      if (!promptEmail) return;
-      if (!this.isValidEmail(promptEmail)) {
-        alert('Invalid email address format.');
+      this.showGoogleModal = true;
+      this.showCustomGoogleInput = false;
+      this.customGoogleEmail = '';
+    },
+
+    closeGoogleChooser() {
+      this.showGoogleModal = false;
+    },
+
+    selectGoogleAccount(acc) {
+      this.email = acc.email;
+      this.loginMethod = 'google';
+      this.showGoogleModal = false;
+      if (Alpine.store('auth') && acc.name) {
+        Alpine.store('auth').save({
+          name: acc.name,
+          email: acc.email,
+          avatar: acc.avatar || null
+        });
+      }
+      this.dispatchOtpEmail(acc.email);
+    },
+
+    submitCustomGoogleAccount() {
+      if (!this.customGoogleEmail || !this.isValidEmail(this.customGoogleEmail)) {
+        alert('Please enter a valid Google email address.');
         return;
       }
-      this.email = promptEmail;
-      this.loginMethod = 'google';
-      this.dispatchOtpEmail(promptEmail);
+      const acc = {
+        name: this.customGoogleEmail.split('@')[0].replace('.', ' '),
+        email: this.customGoogleEmail,
+        avatar: ''
+      };
+      this.selectGoogleAccount(acc);
     },
 
     dispatchOtpEmail(targetEmail) {
@@ -693,7 +746,7 @@ document.addEventListener('alpine:init', () => {
         this.step = 'otp';
         this.enteredOtp = ['', '', '', '', '', ''];
         this.startOtpCountdown();
-        this.infoMsg = `Security OTP sent to ${targetEmail}. Please check your email.`;
+        this.infoMsg = `Security verification code sent to ${targetEmail}. Please check your email.`;
 
         // Focus first OTP field
         this.$nextTick(() => {
@@ -702,7 +755,7 @@ document.addEventListener('alpine:init', () => {
         });
 
         window.dispatchEvent(new CustomEvent('toast', { detail: `Email sent! Verification code: ${otp}` }));
-      }, 600);
+      }, 500);
     },
 
     resendOtp() {
@@ -759,7 +812,7 @@ document.addEventListener('alpine:init', () => {
       }
 
       if (this.combinedOtp !== this.generatedOtp) {
-        this.error = 'Invalid OTP code. Please verify against the email notification or click Resend.';
+        this.error = 'Invalid OTP code. Please check your email inbox and enter the matching code.';
         return;
       }
 
@@ -778,7 +831,6 @@ document.addEventListener('alpine:init', () => {
       }, 700);
     }
   }));
-
   Alpine.data('toastManager', () => ({
     toasts: [],
     init() {
