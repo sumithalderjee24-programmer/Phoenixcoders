@@ -619,6 +619,166 @@ document.addEventListener('alpine:init', () => {
     }
   }));
 
+  // Authentication & OTP Verification Manager
+  Alpine.data('authLogin', () => ({
+    step: 'credentials', // 'credentials' | 'otp'
+    loginMethod: 'email', // 'email' | 'google'
+    email: 'student@university.edu',
+    password: '',
+    showPassword: false,
+    error: '',
+    infoMsg: '',
+    generatedOtp: '',
+    enteredOtp: ['', '', '', '', '', ''],
+    timer: 60,
+    timerInterval: null,
+    isSubmitting: false,
+
+    get combinedOtp() {
+      return this.enteredOtp.join('');
+    },
+
+    isValidEmail(mail) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail);
+    },
+
+    startOtpCountdown() {
+      if (this.timerInterval) clearInterval(this.timerInterval);
+      this.timer = 60;
+      this.timerInterval = setInterval(() => {
+        if (this.timer > 0) {
+          this.timer--;
+        } else {
+          clearInterval(this.timerInterval);
+        }
+      }, 1000);
+    },
+
+    sendCredentials() {
+      this.error = '';
+      if (!this.email || !this.isValidEmail(this.email)) {
+        this.error = 'Please enter a valid university email address (e.g. name@university.edu).';
+        return;
+      }
+      if (!this.password || this.password.length < 6) {
+        this.error = 'Password must be at least 6 characters.';
+        return;
+      }
+
+      this.loginMethod = 'email';
+      this.dispatchOtpEmail(this.email);
+    },
+
+    startGoogleLogin() {
+      this.error = '';
+      const promptEmail = prompt('Sign in with Google Account:\nEnter your Google Email ID:', this.email || 'student@gmail.com');
+      if (!promptEmail) return;
+      if (!this.isValidEmail(promptEmail)) {
+        alert('Invalid email address format.');
+        return;
+      }
+      this.email = promptEmail;
+      this.loginMethod = 'google';
+      this.dispatchOtpEmail(promptEmail);
+    },
+
+    dispatchOtpEmail(targetEmail) {
+      this.isSubmitting = true;
+      // Generate secure 6-digit numeric OTP
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+      this.generatedOtp = otp;
+
+      setTimeout(() => {
+        this.isSubmitting = false;
+        this.step = 'otp';
+        this.enteredOtp = ['', '', '', '', '', ''];
+        this.startOtpCountdown();
+        this.infoMsg = `Security OTP sent to ${targetEmail}. Please check your email.`;
+
+        // Focus first OTP field
+        this.$nextTick(() => {
+          const firstInput = document.getElementById('otp-0');
+          if (firstInput) firstInput.focus();
+        });
+
+        window.dispatchEvent(new CustomEvent('toast', { detail: `Email sent! Verification code: ${otp}` }));
+      }, 600);
+    },
+
+    resendOtp() {
+      if (this.timer > 0) return;
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+      this.generatedOtp = otp;
+      this.startOtpCountdown();
+      this.enteredOtp = ['', '', '', '', '', ''];
+      window.dispatchEvent(new CustomEvent('toast', { detail: `New verification code sent: ${otp}` }));
+    },
+
+    handleOtpInput(index, event) {
+      const val = event.target.value.replace(/[^0-9]/g, '');
+      this.enteredOtp[index] = val ? val.slice(-1) : '';
+
+      // Auto advance to next input
+      if (val && index < 5) {
+        const nextInput = document.getElementById(`otp-${index + 1}`);
+        if (nextInput) nextInput.focus();
+      }
+
+      // Auto verify if all 6 digits entered
+      if (this.combinedOtp.length === 6) {
+        this.verifyAndLogin();
+      }
+    },
+
+    handleOtpKeyDown(index, event) {
+      if (event.key === 'Backspace' && !this.enteredOtp[index] && index > 0) {
+        const prevInput = document.getElementById(`otp-${index - 1}`);
+        if (prevInput) {
+          prevInput.focus();
+          this.enteredOtp[index - 1] = '';
+        }
+      }
+    },
+
+    handleOtpPaste(event) {
+      event.preventDefault();
+      const paste = (event.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '');
+      if (paste.length >= 6) {
+        for (let i = 0; i < 6; i++) {
+          this.enteredOtp[i] = paste[i] || '';
+        }
+        this.verifyAndLogin();
+      }
+    },
+
+    verifyAndLogin() {
+      this.error = '';
+      if (this.combinedOtp.length !== 6) {
+        this.error = 'Please enter all 6 digits of the OTP code.';
+        return;
+      }
+
+      if (this.combinedOtp !== this.generatedOtp) {
+        this.error = 'Invalid OTP code. Please verify against the email notification or click Resend.';
+        return;
+      }
+
+      this.isSubmitting = true;
+      // Update global auth store with logged-in user email
+      if (Alpine.store('auth')) {
+        Alpine.store('auth').save({
+          email: this.email,
+          name: this.loginMethod === 'google' ? this.email.split('@')[0].replace('.', ' ') : (Alpine.store('auth').user.name || 'Student User')
+        });
+      }
+
+      window.dispatchEvent(new CustomEvent('toast', { detail: 'Verification successful! Logging in...' }));
+      setTimeout(() => {
+        window.location.href = 'index.html';
+      }, 700);
+    }
+  }));
+
   Alpine.data('toastManager', () => ({
     toasts: [],
     init() {
