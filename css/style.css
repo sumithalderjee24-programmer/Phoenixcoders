@@ -1,4 +1,4 @@
-/* 
+﻿/* 
   CampusFix Design System
   Tokens, Base, Components, Pages, Utilities, Motion, Responsive
 */
@@ -199,14 +199,96 @@ input, textarea, select { font-family: inherit; }
 .admin-nav .hamburger { color: var(--surface); }
 @media (min-width: 768px) { .hamburger { display: none; } }
 
-/* Mobile Menu */
+/* ============================================================
+   Mobile Menu / Drawer — Solid Black Background
+   ============================================================ */
 .mobile-menu {
   position: fixed; top: 64px; left: 0; right: 0; bottom: 0;
-  background: var(--surface); z-index: 40;
+  background: #000000 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  z-index: 40;
   padding: var(--space-5);
   display: flex; flex-direction: column; gap: var(--space-5);
+  overflow-y: auto;
 }
-.admin-nav ~ .mobile-menu { background: var(--ink); color: var(--surface); }
+
+/* All text/links inside drawer → white */
+.mobile-menu,
+.mobile-menu .nav-link,
+.mobile-menu a,
+.mobile-menu span,
+.mobile-menu p,
+.mobile-menu h1, .mobile-menu h2, .mobile-menu h3,
+.mobile-menu .text-ink,
+.mobile-menu .font-bold,
+.mobile-menu .font-medium,
+.mobile-menu .font-semibold,
+.mobile-menu .text-sm,
+.mobile-menu .nav-brand {
+  color: #ffffff !important;
+}
+
+/* Drawer icons */
+.mobile-menu i,
+.mobile-menu .ph,
+.mobile-menu .ph-bold,
+.mobile-menu .ph-fill {
+  color: #ffffff !important;
+}
+
+/* Keep indigo accent colour on accent icons */
+.mobile-menu .text-accent,
+.mobile-menu i.text-accent,
+.mobile-menu .ph.text-accent,
+.mobile-menu .ph-bold.text-accent,
+.mobile-menu .ph-fill.text-accent {
+  color: #818cf8 !important;
+}
+
+/* Caret / subtle icons */
+.mobile-menu .text-muted,
+.mobile-menu i.text-muted,
+.mobile-menu .ph.text-muted {
+  color: rgba(255,255,255,0.45) !important;
+}
+
+/* Logout link → bright red */
+.mobile-menu a.text-red-500,
+.mobile-menu .text-red-500 {
+  color: #f87171 !important;
+}
+
+/* Dividers → subtle white */
+.mobile-menu .border-b,
+.mobile-menu .border-t,
+.mobile-menu .border-border {
+  border-color: rgba(255,255,255,0.15) !important;
+}
+
+/* Profile pill card in drawer */
+.mobile-menu .bg-bg {
+  background: rgba(255,255,255,0.08) !important;
+  border-color: rgba(255,255,255,0.15) !important;
+}
+
+/* Theme toggle button in drawer */
+.mobile-menu .theme-toggle-btn {
+  border-color: rgba(255,255,255,0.2) !important;
+  color: #ffffff !important;
+}
+
+/* Close (×) hamburger inside drawer */
+.mobile-menu .hamburger,
+.mobile-menu button {
+  color: #ffffff !important;
+}
+
+/* Admin nav drawer */
+.admin-nav ~ .mobile-menu { background: #000000 !important; color: #ffffff !important; }
+
+/* Override any theme mode → always solid black */
+[data-theme="dark"] .mobile-menu { background: #000000 !important; }
 
 /* Buttons */
 .btn {
@@ -2140,3 +2222,4 @@ input, textarea, select { font-family: inherit; }
   outline: none;
   color: var(--accent);
 }
+
