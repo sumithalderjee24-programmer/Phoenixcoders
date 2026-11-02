@@ -1,4 +1,4 @@
-/**
+﻿/**
  * CampusFix Core Application Logic
  */
 
@@ -697,6 +697,27 @@ document.addEventListener('alpine:init', () => {
       this.dispatchOtpEmail(this.email);
     },
 
+    handleGoogleDirectLogin() {
+      this.error = '';
+      this.openGoogleChooser();
+    },
+
+    handleFacebookLogin() {
+      this.error = '';
+      this.loginMethod = 'facebook';
+      const fbUser = {
+        name: 'Student User',
+        email: 'student.facebook@campus.edu',
+        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=128&q=80'
+      };
+      if (Alpine.store('auth')) {
+        Alpine.store('auth').save(fbUser);
+      }
+      this.email = fbUser.email;
+      window.dispatchEvent(new CustomEvent('toast', { detail: 'Connecting via Facebook authentication...' }));
+      this.dispatchOtpEmail(fbUser.email);
+    },
+
     openGoogleChooser() {
       this.error = '';
       this.showGoogleModal = true;
@@ -851,3 +872,4 @@ document.addEventListener('alpine:init', () => {
     }
   }));
 });
+

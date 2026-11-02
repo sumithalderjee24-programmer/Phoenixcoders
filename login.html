@@ -1,301 +1,201 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - CampusFix</title>
+  <title>Sign in - CampusFix</title>
   <link rel="stylesheet" href="css/style.css">
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="js/app.js"></script>
   <script src="js/bg-interactive.js"></script>
-  <script src="js/camera-modal.js"></script>
 </head>
-<body class="bg-surface">
+<body class="cyber-login-body">
 
-  <!-- Interactive Modern Container Wrapper -->
-  <div class="modern-auth-wrapper" x-data="authLogin">
+  <!-- Interactive Background Canvas & Ambient Lighting Orbs -->
+  <div class="cyber-bg-container">
+    <canvas id="cyberShieldCanvas" class="cyber-canvas"></canvas>
+    <div class="cyber-ambient-glow glow-cyan"></div>
+    <div class="cyber-ambient-glow glow-blue"></div>
+  </div>
+
+  <!-- Main Cyber Card Container Matching Exact Visual Reference -->
+  <div class="cyber-auth-wrapper" x-data="authLogin">
     
-    <div class="modern-auth-container page-fade-in">
+    <div class="cyber-auth-card">
       
-      <!-- ================= LEFT BRAND SHOWCASE WITH ANIMATED HIGHLIGHTS ================= -->
-      <div class="modern-auth-showcase">
+      <!-- ================= LEFT COLUMN: SIGN IN FORM ================= -->
+      <div class="cyber-form-section">
         
         <!-- Header -->
-        <div class="flex items-center justify-between relative z-10">
-          <a href="index.html" class="flex items-center gap-2.5 text-white font-bold text-2xl tracking-tight no-underline hover:opacity-90">
-            <span class="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 shadow-inner">
-              <i class="ph-fill ph-wrench text-xl text-amber-300"></i>
-            </span>
-            <span>CampusFix</span>
-          </a>
-          <span class="text-xs uppercase tracking-widest font-mono bg-white/15 px-3 py-1 rounded-full border border-white/20 backdrop-blur-sm">
-            v2.6 Portal
-          </span>
-        </div>
-
-        <!-- Center Showcase Value Proposition & Interactive Highlights -->
-        <div class="my-8 relative z-10 flex flex-col gap-6">
-          <div>
-            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 border border-white/25 backdrop-blur-md text-xs font-semibold text-amber-200 mb-4 shadow-sm">
-              <span class="pulse-indicator-ring"></span>
-              Live Campus Infrastructure Triage
-            </div>
-            <h1 class="text-3xl md:text-5xl font-extrabold leading-tight text-white mb-3">
-              Every issue.<br>
-              <span class="bg-gradient-to-r from-amber-200 via-pink-200 to-white bg-clip-text text-transparent">Tracked & Resolved.</span>
-            </h1>
-            <p class="text-white/80 text-sm md:text-base max-w-md leading-relaxed">
-              The transparent student-led accountability engine. Report damaged classrooms, labs, and dorm facilities with live verification.
-            </p>
-          </div>
-
-          <!-- Interactive Live Ticker Cards -->
-          <div class="flex flex-col gap-3">
-            <div class="floating-glass-card flex items-center justify-between">
-              <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-xl bg-amber-400/25 border border-amber-300/40 flex items-center justify-center text-amber-300 text-lg">
-                  <i class="ph-bold ph-shield-check"></i>
-                </div>
-                <div>
-                  <div class="text-xs text-white/70 font-semibold uppercase tracking-wider">Authentication</div>
-                  <div class="text-sm font-bold text-white">Email 2-Factor OTP & Google SSO</div>
-                </div>
-              </div>
-              <i class="ph-bold ph-check text-emerald-300 text-lg"></i>
-            </div>
-
-            <div class="floating-glass-card flex items-center justify-between">
-              <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-xl bg-emerald-400/25 border border-emerald-300/40 flex items-center justify-center text-emerald-300 text-lg">
-                  <i class="ph-bold ph-camera"></i>
-                </div>
-                <div>
-                  <div class="text-xs text-white/70 font-semibold uppercase tracking-wider">Proof of Work</div>
-                  <div class="text-sm font-bold text-white">Live Camera / Webcam Evidence</div>
-                </div>
-              </div>
-              <span class="text-xs font-mono font-bold text-white/80 bg-white/10 px-2.5 py-0.5 rounded-full">ACTIVE</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Showcase Footer -->
-        <div class="relative z-10 flex items-center justify-between text-xs text-white/70 border-t border-white/15 pt-4">
-          <span>&copy; 2026 CampusFix Samurai</span>
-          <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-            <span>Network Online</span>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- ================= RIGHT AUTHENTICATION INTERACTION PANE ================= -->
-      <div class="modern-auth-form-pane">
+        <h1 class="cyber-title">Sign in</h1>
         
-        <!-- Mobile Brand Heading (Hidden on Desktop) -->
-        <div class="md:hidden flex items-center justify-between mb-6 pb-4 border-b border-border">
-          <div class="flex items-center gap-2 font-bold text-xl text-ink">
-            <i class="ph-fill ph-wrench text-accent"></i> CampusFix
-          </div>
-          <!-- Theme Toggle Button -->
-          <button type="button" class="theme-toggle-btn" @click="$store.theme.toggle()" :title="$store.theme.mode === 'dark' ? 'Switch to Bright Mode' : 'Switch to Dark Mode'">
-            <i class="ph-bold" :class="$store.theme.mode === 'dark' ? 'ph-sun text-yellow-400' : 'ph-moon text-indigo-600'"></i>
-          </button>
+        <p class="cyber-subtitle">
+          Don't have an account? 
+          <a href="register.html" class="cyber-link">Create now</a>
+        </p>
+
+        <!-- Notification Banner / Alert -->
+        <div x-show="error" class="cyber-alert" style="display: none;" x-transition>
+          <i class="ph-bold ph-warning-circle"></i>
+          <span x-text="error"></span>
         </div>
 
-        <!-- Registration Success Notification -->
-        <div x-show="window.location.hash === '#registered'" class="bg-status-resolved-bg text-status-resolved-text p-3.5 rounded-xl mb-6 text-sm font-semibold flex items-center gap-2 border border-emerald-500/20 shadow-sm" style="display:none;">
-          <i class="ph-fill ph-check-circle text-xl flex-shrink-0"></i>
-          <span>Account created successfully! Please verify credentials below.</span>
+        <div x-show="infoMsg" class="cyber-info" style="display: none;" x-transition>
+          <i class="ph-bold ph-info"></i>
+          <span x-text="infoMsg"></span>
         </div>
 
-        <!-- ================= STEP 1: CREDENTIALS & GOOGLE SIGN-IN ================= -->
+        <!-- ================= STEP 1: FORM CREDENTIALS ================= -->
         <div x-show="step === 'credentials'" x-transition.opacity>
-          <div class="flex items-center justify-between mb-2">
-            <div>
-              <h2 class="text-2xl md:text-3xl font-extrabold text-ink leading-tight m-0">Student Sign In</h2>
-              <p class="text-xs md:text-sm text-muted mt-1">Authenticate with your campus email or Google SSO.</p>
+          <form @submit.prevent="sendCredentials()" class="cyber-form">
+            
+            <!-- Email Input -->
+            <div class="cyber-input-group">
+              <label class="cyber-label">Email</label>
+              <input type="email" 
+                     x-model="email" 
+                     required 
+                     class="cyber-input" 
+                     placeholder="example@gmail.com" 
+                     autocomplete="email">
             </div>
-            <!-- Desktop Theme Toggle -->
-            <button type="button" class="hidden md:inline-flex theme-toggle-btn" @click="$store.theme.toggle()" :title="$store.theme.mode === 'dark' ? 'Switch to Bright Mode' : 'Switch to Dark Mode'">
-              <i class="ph-bold" :class="$store.theme.mode === 'dark' ? 'ph-sun text-yellow-400' : 'ph-moon text-indigo-600'"></i>
+
+            <!-- Password Input with Eye Icon -->
+            <div class="cyber-input-group">
+              <label class="cyber-label">Password</label>
+              <div class="cyber-input-password-wrapper">
+                <input :type="showPassword ? 'text' : 'password'" 
+                       x-model="password" 
+                       required 
+                       class="cyber-input cyber-password-input" 
+                       placeholder="@#*%" 
+                       autocomplete="current-password">
+                <button type="button" 
+                        class="cyber-eye-btn" 
+                        @click="showPassword = !showPassword" 
+                        tabindex="-1"
+                        aria-label="Toggle password visibility">
+                  <i class="ph" :class="showPassword ? 'ph-eye-slash' : 'ph-eye'"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Primary Blue Sign in Button -->
+            <button type="submit" class="cyber-btn-primary" :disabled="isSubmitting">
+              <span x-show="!isSubmitting">Sign in</span>
+              <span x-show="isSubmitting" style="display: none;">Verifying...</span>
             </button>
+          </form>
+
+          <!-- Divider: OR -->
+          <div class="cyber-divider">
+            <span class="cyber-divider-line"></span>
+            <span class="cyber-divider-text">OR</span>
+            <span class="cyber-divider-line"></span>
           </div>
 
-          <!-- Error Alert Banner -->
-          <div x-show="error" class="bg-status-open-bg text-status-open-text p-3 rounded-xl mb-4 text-xs font-semibold flex items-center gap-2 border border-amber-500/20 shadow-sm" style="display:none;">
-            <i class="ph-bold ph-warning-circle text-base flex-shrink-0"></i>
-            <span x-text="error"></span>
-          </div>
-
-          <!-- Modern Google One-Tap Sign In Button -->
-          <button type="button" @click="openGoogleChooser()" class="btn-google mt-4 mb-2">
-            <svg width="20" height="20" viewBox="0 0 24 24">
+          <!-- Continue with Google Button -->
+          <button type="button" @click="handleGoogleDirectLogin()" class="cyber-btn-outline cyber-btn-google">
+            <svg class="cyber-oauth-icon" viewBox="0 0 24 24" width="20" height="20">
               <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/>
               <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.35 24 12 24z"/>
               <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
               <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.35 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
             </svg>
-            <span>Sign in with Google</span>
+            <span>Continue with Google</span>
           </button>
 
-          <div class="auth-divider">Or continue with university ID</div>
+          <!-- Continue with Facebook Button -->
+          <button type="button" @click="handleFacebookLogin()" class="cyber-btn-outline cyber-btn-facebook">
+            <svg class="cyber-oauth-icon" viewBox="0 0 24 24" width="20" height="20">
+              <path fill="#1877F2" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              <path fill="#FFFFFF" d="M16.67 15.543l.532-3.47h-3.328v-2.25c0-.949.465-1.874 1.956-1.874h1.514V4.996s-1.374-.235-2.686-.235c-2.741 0-4.533 1.662-4.533 4.669v2.643H7.078v3.47h3.047v8.385a12.09 12.09 0 003.75 0v-8.385h2.795z"/>
+            </svg>
+            <span>Continue with Facebook</span>
+          </button>
 
-          <!-- Animated Form Controls -->
-          <form @submit.prevent="sendCredentials()" class="flex flex-col gap-4">
-            
-            <!-- Email Field -->
-            <div class="form-group mb-0">
-              <label class="form-label text-xs font-bold uppercase tracking-wider text-muted">University Email</label>
-              <div class="modern-input-wrapper">
-                <input type="email" x-model="email" required class="modern-input-field" placeholder="student@university.edu" autocomplete="email">
-                <i class="ph-bold ph-envelope modern-input-icon"></i>
-              </div>
-            </div>
-
-            <!-- Password Field with Perfect In-Box Eye Toggle -->
-            <div class="form-group mb-0">
-              <div class="flex items-center justify-between mb-1.5">
-                <label class="form-label mb-0 text-xs font-bold uppercase tracking-wider text-muted">Password</label>
-                <a href="#" @click.prevent="alert('A password reset link has been dispatched to ' + (email || 'your email'))" class="text-xs text-accent font-semibold hover:underline">Forgot password?</a>
-              </div>
-              <div class="modern-input-wrapper">
-                <input :type="showPassword ? 'text' : 'password'" x-model="password" required class="modern-input-field" placeholder="Enter your password" autocomplete="current-password" style="padding-right: 48px;">
-                <i class="ph-bold ph-lock-key modern-input-icon"></i>
-                <button type="button" class="btn-password-toggle" @click="showPassword = !showPassword" aria-label="Toggle password visibility">
-                  <i class="ph-bold" :class="showPassword ? 'ph-eye-slash' : 'ph-eye'"></i>
-                </button>
-              </div>
-            </div>
-            <!-- Modern Gradient Glow Submit Button -->
-            <button type="submit" class="btn-modern-glow mt-2" :disabled="isSubmitting">
-              <span x-show="!isSubmitting" class="flex items-center gap-2">
-                <span>Continue & Send Email OTP</span>
-                <i class="ph-bold ph-arrow-right"></i>
-              </span>
-              <span x-show="isSubmitting" style="display:none;" class="flex items-center gap-2">
-                <i class="ph-bold ph-spinner animate-spin text-lg"></i>
-                <span>Dispatching Security OTP...</span>
-              </span>
-            </button>
-          </form>
-
-          <!-- Register and Admin Links -->
-          <div class="mt-6 text-center text-sm">
-            <span class="text-muted">Don't have an account?</span> 
-            <a href="register.html" class="font-bold text-accent hover:underline ml-1">Create an account &rarr;</a>
-          </div>
-
-          <div class="mt-6 pt-5 border-t border-border flex items-center justify-between text-xs text-muted">
-            <span>Admin or facilities crew?</span>
-            <a href="admin_dashboard.html" class="font-bold text-ink hover:text-accent border border-border px-3 py-1.5 rounded-full hover:bg-bg transition-colors inline-flex items-center gap-1.5">
-              <i class="ph-bold ph-shield-check text-accent"></i> Sign in as admin
+          <!-- Secondary Links: Guest / Return to Home -->
+          <div class="cyber-extra-actions">
+            <a href="index.html" class="cyber-muted-link">
+              <i class="ph ph-arrow-left"></i> Return to CampusFix Home
             </a>
+            <a href="admin_dashboard.html" class="cyber-muted-link">Admin Access</a>
           </div>
         </div>
 
-        <!-- ================= STEP 2: 2FA EMAIL OTP VERIFICATION ================= -->
-        <div x-show="step === 'otp'" x-transition.opacity style="display:none;">
-          <div class="flex items-center gap-2 text-accent mb-2">
-            <div class="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center">
-              <i class="ph-fill ph-envelope-simple text-lg"></i>
+        <!-- ================= STEP 2: EMAIL OTP VERIFICATION ================= -->
+        <div x-show="step === 'otp'" x-transition.opacity style="display: none;">
+          <div class="cyber-otp-box">
+            <h3 class="cyber-otp-title">Enter Verification OTP</h3>
+            <p class="cyber-otp-desc">
+              A 6-digit confirmation code was dispatched to: <br>
+              <strong class="cyber-target-email" x-text="email"></strong>
+            </p>
+
+            <!-- Notification badge displaying code -->
+            <div class="cyber-otp-display-badge">
+              <span>Code: </span>
+              <strong x-text="generatedOtp"></strong>
+              <button type="button" @click="autoFillOtp()" class="cyber-btn-autofill">Auto-fill</button>
             </div>
-            <span class="text-xs font-bold uppercase tracking-wider">Two-Factor Authentication</span>
-          </div>
 
-          <h2 class="text-2xl md:text-3xl font-extrabold text-ink leading-tight mb-1">Verify Your Email</h2>
-          <p class="text-sm text-muted mb-4 leading-relaxed">
-            Enter the 6-digit confirmation code dispatched to <strong class="text-ink font-mono" x-text="email"></strong>.
-          </p>
-
-          <!-- Prominent Interactive Email Dispatch Notice & Code Display -->
-          <div class="simulated-mail-banner p-4 bg-gradient-to-r from-indigo-50 to-purple-50 border border-indigo-200 rounded-xl mb-4 shadow-sm">
-            <div class="flex items-start gap-3">
-              <div class="w-9 h-9 rounded-full bg-accent/15 text-accent flex items-center justify-center flex-shrink-0 mt-0.5">
-                <i class="ph-fill ph-envelope-open text-xl"></i>
-              </div>
-              <div class="flex-grow min-w-0">
-                <div class="flex items-center justify-between gap-2 flex-wrap">
-                  <span class="text-xs font-bold text-ink uppercase tracking-wider">Email Dispatch Notification</span>
-                  <span class="text-[11px] font-mono text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-semibold">Sent to <span x-text="email"></span></span>
-                </div>
-                <div class="text-xs text-muted mt-1 leading-relaxed">
-                  Your one-time security authentication code is:
-                </div>
-                <div class="flex items-center gap-3 mt-2">
-                  <div class="otp-badge-pill text-lg font-mono font-bold tracking-widest px-3 py-1 bg-accent text-white rounded-lg shadow-sm" x-text="generatedOtp"></div>
-                  <button type="button" @click="autoFillOtp()" class="btn btn-secondary text-xs py-1 px-2.5 inline-flex items-center gap-1 hover:border-accent">
-                    <i class="ph-bold ph-copy"></i> Auto-fill code
-                  </button>
-                </div>
-              </div>
+            <div class="cyber-otp-grid">
+              <template x-for="(digit, idx) in enteredOtp" :key="idx">
+                <input type="text" 
+                       :id="otp-"
+                       maxlength="1" 
+                       inputmode="numeric" 
+                       class="cyber-otp-digit"
+                       :value="digit"
+                       @input="handleOtpInput(idx, )"
+                       @keydown="handleOtpKeyDown(idx, )">
+              </template>
             </div>
-          </div>
-          <!-- Error Alert Banner -->
-          <div x-show="error" class="bg-status-open-bg text-status-open-text p-3 rounded-xl mb-4 text-xs font-semibold flex items-center gap-2 border border-amber-500/20 shadow-sm" style="display:none;">
-            <i class="ph-bold ph-warning-circle text-base flex-shrink-0"></i>
-            <span x-text="error"></span>
-          </div>
 
-          <!-- 6-Digit OTP Input Grid -->
-          <label class="form-label text-xs font-bold uppercase tracking-wider text-muted">Enter 6-Digit Verification Code</label>
-          <div class="otp-inputs-grid" @paste="handleOtpPaste($event)">
-            <template x-for="(digit, idx) in enteredOtp" :key="idx">
-              <input type="text" 
-                     :id="`otp-${idx}`"
-                     maxlength="1" 
-                     inputmode="numeric" 
-                     class="otp-digit-input"
-                     :value="digit"
-                     @input="handleOtpInput(idx, $event)"
-                     @keydown="handleOtpKeyDown(idx, $event)">
-            </template>
-          </div>
+            <div class="cyber-otp-timer-row">
+              <span x-show="timer > 0">Resend code in <strong x-text="timer"></strong>s</span>
+              <button type="button" x-show="timer === 0" @click="resendOtp()" class="cyber-link">Resend Code</button>
+            </div>
 
-          <!-- Resend Countdown Timer -->
-          <div class="flex items-center justify-between text-xs text-muted mb-5">
-            <span>Didn't receive the OTP email?</span>
-            <button type="button" @click="resendOtp()" class="font-bold text-accent hover:underline disabled:opacity-50 disabled:cursor-not-allowed" :disabled="timer > 0">
-              <span x-show="timer > 0">Resend code in <span class="font-mono font-bold" x-text="timer"></span>s</span>
-              <span x-show="timer === 0">Resend Code Now</span>
+            <button type="button" @click="verifyAndLogin()" class="cyber-btn-primary">
+              Verify & Complete Sign in
             </button>
-          </div>
 
-          <!-- Confirm & Login Button -->
-          <button type="button" @click="verifyAndLogin()" class="btn-modern-glow" :disabled="isSubmitting">
-            <span x-show="!isSubmitting" class="flex items-center gap-2">
-              <i class="ph-bold ph-check-circle text-lg"></i>
-              <span>Confirm OTP & Enter Portal</span>
-            </span>
-            <span x-show="isSubmitting" style="display:none;" class="flex items-center gap-2">
-              <i class="ph-bold ph-spinner animate-spin text-lg"></i>
-              <span>Authenticating Profile...</span>
-            </span>
-          </button>
-
-          <!-- Back to Credentials Option -->
-          <div class="mt-4 text-center">
-            <button type="button" @click="step = 'credentials'; error = ''" class="btn btn-ghost text-xs text-muted hover:text-ink">
-              &larr; Re-enter credentials with another email
+            <button type="button" @click="step = 'credentials'; error = ''" class="cyber-btn-back">
+              &larr; Back to sign in
             </button>
           </div>
         </div>
 
+      </div>
+
+      <!-- ================= RIGHT COLUMN: ANIMATED CYBER SHIELD ================= -->
+      <div class="cyber-visual-section">
+        <div class="cyber-shield-container">
+          <!-- Cyber Circuit Glowing Shield -->
+          <div class="cyber-shield-outer">
+            <div class="cyber-shield-inner">
+              <div class="cyber-shield-circuit"></div>
+              <div class="cyber-keyhole"></div>
+            </div>
+          </div>
+          <!-- Background Cyber Vortex & Particle Rays -->
+          <div class="cyber-pulse-ring ring-1"></div>
+          <div class="cyber-pulse-ring ring-2"></div>
+          <div class="cyber-particle-halo"></div>
+        </div>
       </div>
 
     </div>
 
   </div>
 
-  <!-- ================= MODERN GOOGLE ACCOUNT CHOOSER DIALOG ================= -->
+  <!-- Google Account Chooser Modal (Instant One-Tap Dialog) -->
   <div class="google-modal-backdrop" x-show="showGoogleModal" x-transition.opacity style="display:none;" @click.self="closeGoogleChooser()">
     <div class="google-modal-card" @click.outside="closeGoogleChooser()">
-      <!-- Google Brand Header -->
       <div class="p-6 pb-4 border-b border-border/50">
         <div class="flex items-center justify-between mb-4">
-          <!-- Google Logo -->
           <svg width="74" height="24" viewBox="0 0 74 24">
             <path fill="#4285F4" d="M9.24 10.87v3.23h5.17c-.2 1.35-.82 2.49-1.87 3.23-1.07.74-2.48 1.18-4.3 1.18-3.48 0-6.3-2.82-6.3-6.3s2.82-6.3 6.3-6.3c1.7 0 3.03.62 4.02 1.54l2.28-2.28C13.11 3.55 11.38 2.7 9.24 2.7 4.2 2.7 0 6.9 0 11.94s4.2 9.24 9.24 9.24c2.72 0 4.79-.89 6.46-2.58 1.74-1.74 2.27-4.18 2.27-6.22 0-.61-.06-1.07-.12-1.51H9.24z"/>
             <path fill="#EA4335" d="M25.7 8.35c-3.23 0-5.83 2.5-5.83 5.83s2.6 5.83 5.83 5.83 5.83-2.5 5.83-5.83-2.6-5.83-5.83-5.83zm0 9.38c-1.8 0-3.32-1.48-3.32-3.55 0-2.1 1.52-3.55 3.32-3.55 1.8 0 3.32 1.45 3.32 3.55 0 2.07-1.52 3.55-3.32 3.55z"/>
@@ -308,11 +208,10 @@
             <i class="ph-bold ph-x text-lg"></i>
           </button>
         </div>
-        <h3 class="text-xl font-bold leading-tight m-0">Choose an account</h3>
-        <p class="text-xs text-muted mt-1 leading-normal">to continue to <strong class="text-ink">CampusFix</strong>. Google will send an email confirmation OTP to verify your account.</p>
+        <h3 class="text-xl font-bold leading-tight m-0">Sign in with Google</h3>
+        <p class="text-xs text-muted mt-1 leading-normal">Choose an account to sign in directly to CampusFix:</p>
       </div>
 
-      <!-- Account List -->
       <div class="py-2 max-h-80 overflow-y-auto">
         <template x-for="acc in googleAccounts" :key="acc.email">
           <div class="google-account-item" @click="selectGoogleAccount(acc)">
@@ -320,7 +219,7 @@
               <img :src="acc.avatar" :alt="acc.name" class="google-avatar">
             </template>
             <template x-if="!acc.avatar">
-              <div class="google-avatar-placeholder" :style="`background-color: ${acc.bg || '#4285F4'}`" x-text="acc.initial || acc.name.charAt(0)"></div>
+              <div class="google-avatar-placeholder" :style="ackground-color: " x-text="acc.initial || acc.name.charAt(0)"></div>
             </template>
             <div class="flex-grow min-w-0">
               <div class="font-semibold text-sm leading-snug truncate" x-text="acc.name"></div>
@@ -330,45 +229,94 @@
           </div>
         </template>
 
-        <!-- Use Another Account Option -->
+        <!-- Use another account input -->
         <div class="google-account-item" @click="showCustomGoogleInput = !showCustomGoogleInput">
           <div class="w-10 h-10 rounded-full bg-bg border border-border flex items-center justify-center text-muted">
             <i class="ph-bold ph-user-plus text-lg text-accent"></i>
           </div>
           <div class="flex-grow">
             <div class="font-semibold text-sm leading-snug">Use another account</div>
-            <div class="text-xs text-muted">Log in with a different Google email</div>
+            <div class="text-xs text-muted">Sign in with any other Google account</div>
           </div>
         </div>
 
-        <!-- Custom Account Input Drawer -->
         <div x-show="showCustomGoogleInput" class="p-4 bg-bg border-t border-border" style="display:none;">
-          <label class="form-label text-xs font-bold uppercase tracking-wider text-muted">Google Email Address</label>
           <div class="flex gap-2">
             <input type="email" x-model="customGoogleEmail" class="form-input text-xs" placeholder="yourname@gmail.com" @keydown.enter.prevent="submitCustomGoogleAccount()">
             <button type="button" @click="submitCustomGoogleAccount()" class="btn btn-primary text-xs py-2 px-3 whitespace-nowrap">
-              Proceed
+              Sign In
             </button>
           </div>
         </div>
       </div>
-
-      <!-- Google Modal Footer -->
-      <div class="p-4 bg-bg border-t border-border flex items-center justify-between text-xs text-muted">
-        <span>To continue, Google will share your name and email address with CampusFix.</span>
-      </div>
     </div>
   </div>
 
-  <!-- Toast Container -->
-  <div x-data="toastManager" class="toast-container">
-    <template x-for="toast in toasts" :key="toast.id">
-      <div class="toast animate-fade-in">
-        <i class="ph-fill ph-check-circle text-accent"></i>
-        <span x-text="toast.msg"></span>
-      </div>
-    </template>
-  </div>
+  <!-- Interactive Background Canvas Script for Cyber Particles -->
+  <script>
+    (function initCyberBackground() {
+      const canvas = document.getElementById('cyberShieldCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width, height;
+      let particles = [];
 
+      function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      for (let i = 0; i < 90; i++) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          radius: Math.random() * 2 + 0.5,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.4,
+          alpha: Math.random() * 0.6 + 0.2
+        });
+      }
+
+      function render() {
+        ctx.clearRect(0, 0, width, height);
+        
+        // Draw cyber particles & connecting lines
+        for (let i = 0; i < particles.length; i++) {
+          let p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+
+          if (p.x < 0) p.x = width;
+          if (p.x > width) p.x = 0;
+          if (p.y < 0) p.y = height;
+          if (p.y > height) p.y = 0;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = gba(0, 229, 255, );
+          ctx.shadowBlur = 10;
+          ctx.shadowColor = '#00e5ff';
+          ctx.fill();
+
+          for (let j = i + 1; j < particles.length; j++) {
+            let p2 = particles[j];
+            let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+            if (dist < 110) {
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = gba(0, 150, 255, );
+              ctx.lineWidth = 0.8;
+              ctx.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(render);
+      }
+      render();
+    })();
+  </script>
 </body>
 </html>
