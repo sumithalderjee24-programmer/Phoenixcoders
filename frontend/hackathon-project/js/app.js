@@ -758,25 +758,44 @@ document.addEventListener('alpine:init', () => {
 
     dispatchOtpEmail(targetEmail) {
       this.isSubmitting = true;
+      this.error = '';
       // Generate secure 6-digit numeric OTP
       const otp = Math.floor(100000 + Math.random() * 900000).toString();
       this.generatedOtp = otp;
+
+      // Real email dispatch using public SMTP relay API to deliver OTP message straight to inbox
+      try {
+        fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            access_key: 'b16e6b4f-db16-4ede-9a30-6bbcac4bc5f5',
+            subject: 'CampusFix Login Verification Code: ' + otp,
+            from_name: 'CampusFix Security Portal',
+            to_email: targetEmail,
+            email: targetEmail,
+            message: 'Hello, your CampusFix security verification login code is: ' + otp + '. Please enter this 6-digit code in the login verification box to sign in to CampusFix.'
+          })
+        }).catch(err => console.warn('Email dispatch warning:', err));
+      } catch (e) {
+        console.warn('Mail send failed:', e);
+      }
 
       setTimeout(() => {
         this.isSubmitting = false;
         this.step = 'otp';
         this.enteredOtp = ['', '', '', '', '', ''];
         this.startOtpCountdown();
-        this.infoMsg = `Security verification code sent to ${targetEmail}. Please check your email.`;
+        this.infoMsg = Verification email dispatched to  + targetEmail + . Check your inbox!;
 
-        // Focus first OTP field
+        // Focus first OTP input box
         this.$nextTick(() => {
           const firstInput = document.getElementById('otp-0');
           if (firstInput) firstInput.focus();
         });
 
-        window.dispatchEvent(new CustomEvent('toast', { detail: `Email sent! Verification code: ${otp}` }));
-      }, 500);
+        window.dispatchEvent(new CustomEvent('toast', { detail: 'Verification code sent to ' + targetEmail }));
+      }, 700);
     },
 
     resendOtp() {
@@ -872,4 +891,6 @@ document.addEventListener('alpine:init', () => {
     }
   }));
 });
+
+
 

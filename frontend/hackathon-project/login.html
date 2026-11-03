@@ -19,7 +19,7 @@
     <div class="cyber-ambient-glow glow-blue"></div>
   </div>
 
-  <!-- Main Cyber Card Container Matching Exact Visual Reference -->
+  <!-- Main Cyber Card Container Matching Visual Reference -->
   <div class="cyber-auth-wrapper" x-data="authLogin">
     
     <div class="cyber-auth-card">
@@ -84,7 +84,7 @@
             <!-- Primary Blue Sign in Button -->
             <button type="submit" class="cyber-btn-primary" :disabled="isSubmitting">
               <span x-show="!isSubmitting">Sign in</span>
-              <span x-show="isSubmitting" style="display: none;">Verifying...</span>
+              <span x-show="isSubmitting" style="display: none;">Sending OTP to email...</span>
             </button>
           </form>
 
@@ -127,39 +127,39 @@
         <!-- ================= STEP 2: EMAIL OTP VERIFICATION ================= -->
         <div x-show="step === 'otp'" x-transition.opacity style="display: none;">
           <div class="cyber-otp-box">
-            <h3 class="cyber-otp-title">Enter Verification OTP</h3>
+            <h3 class="cyber-otp-title">Check Your Email Inbox</h3>
             <p class="cyber-otp-desc">
-              A 6-digit confirmation code was dispatched to: <br>
+              We have dispatched a 6-digit confirmation code directly to your email inbox: <br>
               <strong class="cyber-target-email" x-text="email"></strong>
             </p>
 
-            <!-- Notification badge displaying code -->
-            <div class="cyber-otp-display-badge">
-              <span>Code: </span>
-              <strong x-text="generatedOtp"></strong>
-              <button type="button" @click="autoFillOtp()" class="cyber-btn-autofill">Auto-fill</button>
+            <div class="cyber-inbox-tip">
+              <i class="ph-bold ph-envelope-simple"></i>
+              <span>Please check your inbox or spam folder for your login code.</span>
             </div>
 
-            <div class="cyber-otp-grid">
+            <!-- 6-digit OTP input grid without revealing the code on screen -->
+            <div class="cyber-otp-grid" @paste="handleOtpPaste($event)">
               <template x-for="(digit, idx) in enteredOtp" :key="idx">
                 <input type="text" 
-                       :id="otp-"
+                       :id="`otp-${idx}`"
                        maxlength="1" 
                        inputmode="numeric" 
                        class="cyber-otp-digit"
                        :value="digit"
-                       @input="handleOtpInput(idx, )"
-                       @keydown="handleOtpKeyDown(idx, )">
+                       @input="handleOtpInput(idx, $event)"
+                       @keydown="handleOtpKeyDown(idx, $event)">
               </template>
             </div>
 
             <div class="cyber-otp-timer-row">
-              <span x-show="timer > 0">Resend code in <strong x-text="timer"></strong>s</span>
-              <button type="button" x-show="timer === 0" @click="resendOtp()" class="cyber-link">Resend Code</button>
+              <span x-show="timer > 0">Resend email in <strong x-text="timer"></strong>s</span>
+              <button type="button" x-show="timer === 0" @click="resendOtp()" class="cyber-link">Resend Code to Email</button>
             </div>
 
-            <button type="button" @click="verifyAndLogin()" class="cyber-btn-primary">
-              Verify & Complete Sign in
+            <button type="button" @click="verifyAndLogin()" class="cyber-btn-primary" :disabled="isSubmitting">
+              <span x-show="!isSubmitting">Verify & Enter Portal</span>
+              <span x-show="isSubmitting" style="display: none;">Authenticating...</span>
             </button>
 
             <button type="button" @click="step = 'credentials'; error = ''" class="cyber-btn-back">
@@ -189,67 +189,67 @@
 
     </div>
 
-  </div>
-
-  <!-- Google Account Chooser Modal (Instant One-Tap Dialog) -->
-  <div class="google-modal-backdrop" x-show="showGoogleModal" x-transition.opacity style="display:none;" @click.self="closeGoogleChooser()">
-    <div class="google-modal-card" @click.outside="closeGoogleChooser()">
-      <div class="p-6 pb-4 border-b border-border/50">
-        <div class="flex items-center justify-between mb-4">
-          <svg width="74" height="24" viewBox="0 0 74 24">
-            <path fill="#4285F4" d="M9.24 10.87v3.23h5.17c-.2 1.35-.82 2.49-1.87 3.23-1.07.74-2.48 1.18-4.3 1.18-3.48 0-6.3-2.82-6.3-6.3s2.82-6.3 6.3-6.3c1.7 0 3.03.62 4.02 1.54l2.28-2.28C13.11 3.55 11.38 2.7 9.24 2.7 4.2 2.7 0 6.9 0 11.94s4.2 9.24 9.24 9.24c2.72 0 4.79-.89 6.46-2.58 1.74-1.74 2.27-4.18 2.27-6.22 0-.61-.06-1.07-.12-1.51H9.24z"/>
-            <path fill="#EA4335" d="M25.7 8.35c-3.23 0-5.83 2.5-5.83 5.83s2.6 5.83 5.83 5.83 5.83-2.5 5.83-5.83-2.6-5.83-5.83-5.83zm0 9.38c-1.8 0-3.32-1.48-3.32-3.55 0-2.1 1.52-3.55 3.32-3.55 1.8 0 3.32 1.45 3.32 3.55 0 2.07-1.52 3.55-3.32 3.55z"/>
-            <path fill="#FBBC05" d="M38.7 8.35c-3.23 0-5.83 2.5-5.83 5.83s2.6 5.83 5.83 5.83 5.83-2.5 5.83-5.83-2.6-5.83-5.83-5.83zm0 9.38c-1.8 0-3.32-1.48-3.32-3.55 0-2.1 1.52-3.55 3.32-3.55 1.8 0 3.32 1.45 3.32 3.55 0 2.07-1.52 3.55-3.32 3.55z"/>
-            <path fill="#4285F4" d="M51.13 8.65v.98h-.12c-.6-.71-1.74-1.28-3.18-1.28-3.02 0-5.74 2.63-5.74 5.85 0 3.2 2.72 5.83 5.74 5.83 1.44 0 2.58-.57 3.18-1.31h.12v.82c0 2.23-1.19 3.42-3.1 3.42-1.55 0-2.52-1.11-2.92-2.05l-2.18.91c.64 1.51 2.3 3.42 5.1 3.42 2.96 0 5.46-1.74 5.46-6.07V8.65h-2.36zm-2.92 9.08c-1.8 0-3.2-1.51-3.2-3.52 0-2.04 1.4-3.55 3.2-3.55 1.77 0 3.14 1.54 3.14 3.55 0 1.98-1.37 3.52-3.14 3.52z"/>
-            <path fill="#34A853" d="M56.84 3.1h2.51v16.51h-2.51z"/>
-            <path fill="#EA4335" d="M66.38 16.92c-1.25 0-2.15-.57-2.73-1.68l7.47-3.09-.26-.64c-.49-1.33-2-3.16-5-3.16-2.99 0-5.49 2.36-5.49 5.83 0 3.26 2.47 5.83 5.8 5.83 2.69 0 4.25-1.66 4.9-2.62l-2-.133c-.67.98-1.58 1.53-2.69 1.53zm-.18-6.38c.99 0 1.83.5 2.12 1.23l-5.11 2.12c0-2.33 1.63-3.35 2.99-3.35z"/>
-          </svg>
-          <button type="button" @click="closeGoogleChooser()" class="p-1 text-muted hover:text-ink rounded-full">
-            <i class="ph-bold ph-x text-lg"></i>
-          </button>
-        </div>
-        <h3 class="text-xl font-bold leading-tight m-0">Sign in with Google</h3>
-        <p class="text-xs text-muted mt-1 leading-normal">Choose an account to sign in directly to CampusFix:</p>
-      </div>
-
-      <div class="py-2 max-h-80 overflow-y-auto">
-        <template x-for="acc in googleAccounts" :key="acc.email">
-          <div class="google-account-item" @click="selectGoogleAccount(acc)">
-            <template x-if="acc.avatar">
-              <img :src="acc.avatar" :alt="acc.name" class="google-avatar">
-            </template>
-            <template x-if="!acc.avatar">
-              <div class="google-avatar-placeholder" :style="ackground-color: " x-text="acc.initial || acc.name.charAt(0)"></div>
-            </template>
-            <div class="flex-grow min-w-0">
-              <div class="font-semibold text-sm leading-snug truncate" x-text="acc.name"></div>
-              <div class="text-xs text-muted truncate" x-text="acc.email"></div>
-            </div>
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-accent-soft text-accent" x-text="acc.badge || 'Google'"></span>
-          </div>
-        </template>
-
-        <!-- Use another account input -->
-        <div class="google-account-item" @click="showCustomGoogleInput = !showCustomGoogleInput">
-          <div class="w-10 h-10 rounded-full bg-bg border border-border flex items-center justify-center text-muted">
-            <i class="ph-bold ph-user-plus text-lg text-accent"></i>
-          </div>
-          <div class="flex-grow">
-            <div class="font-semibold text-sm leading-snug">Use another account</div>
-            <div class="text-xs text-muted">Sign in with any other Google account</div>
-          </div>
-        </div>
-
-        <div x-show="showCustomGoogleInput" class="p-4 bg-bg border-t border-border" style="display:none;">
-          <div class="flex gap-2">
-            <input type="email" x-model="customGoogleEmail" class="form-input text-xs" placeholder="yourname@gmail.com" @keydown.enter.prevent="submitCustomGoogleAccount()">
-            <button type="button" @click="submitCustomGoogleAccount()" class="btn btn-primary text-xs py-2 px-3 whitespace-nowrap">
-              Sign In
+    <!-- Google Account Chooser Modal (Inside x-data scope) -->
+    <div class="google-modal-backdrop" x-show="showGoogleModal" x-transition.opacity style="display:none;" @click.self="closeGoogleChooser()">
+      <div class="google-modal-card" @click.outside="closeGoogleChooser()">
+        <div class="p-6 pb-4 border-b border-border/50">
+          <div class="flex items-center justify-between mb-4">
+            <svg width="74" height="24" viewBox="0 0 74 24">
+              <path fill="#4285F4" d="M9.24 10.87v3.23h5.17c-.2 1.35-.82 2.49-1.87 3.23-1.07.74-2.48 1.18-4.3 1.18-3.48 0-6.3-2.82-6.3-6.3s2.82-6.3 6.3-6.3c1.7 0 3.03.62 4.02 1.54l2.28-2.28C13.11 3.55 11.38 2.7 9.24 2.7 4.2 2.7 0 6.9 0 11.94s4.2 9.24 9.24 9.24c2.72 0 4.79-.89 6.46-2.58 1.74-1.74 2.27-4.18 2.27-6.22 0-.61-.06-1.07-.12-1.51H9.24z"/>
+              <path fill="#EA4335" d="M25.7 8.35c-3.23 0-5.83 2.5-5.83 5.83s2.6 5.83 5.83 5.83 5.83-2.5 5.83-5.83-2.6-5.83-5.83-5.83zm0 9.38c-1.8 0-3.32-1.48-3.32-3.55 0-2.1 1.52-3.55 3.32-3.55 1.8 0 3.32 1.45 3.32 3.55 0 2.07-1.52 3.55-3.32 3.55z"/>
+              <path fill="#FBBC05" d="M38.7 8.35c-3.23 0-5.83 2.5-5.83 5.83s2.6 5.83 5.83 5.83 5.83-2.5 5.83-5.83-2.6-5.83-5.83-5.83zm0 9.38c-1.8 0-3.32-1.48-3.32-3.55 0-2.1 1.52-3.55 3.32-3.55 1.8 0 3.32 1.45 3.32 3.55 0 2.07-1.52 3.55-3.32 3.55z"/>
+              <path fill="#4285F4" d="M51.13 8.65v.98h-.12c-.6-.71-1.74-1.28-3.18-1.28-3.02 0-5.74 2.63-5.74 5.85 0 3.2 2.72 5.83 5.74 5.83 1.44 0 2.58-.57 3.18-1.31h.12v.82c0 2.23-1.19 3.42-3.1 3.42-1.55 0-2.52-1.11-2.92-2.05l-2.18.91c.64 1.51 2.3 3.42 5.1 3.42 2.96 0 5.46-1.74 5.46-6.07V8.65h-2.36zm-2.92 9.08c-1.8 0-3.2-1.51-3.2-3.52 0-2.04 1.4-3.55 3.2-3.55 1.77 0 3.14 1.54 3.14 3.55 0 1.98-1.37 3.52-3.14 3.52z"/>
+              <path fill="#34A853" d="M56.84 3.1h2.51v16.51h-2.51z"/>
+              <path fill="#EA4335" d="M66.38 16.92c-1.25 0-2.15-.57-2.73-1.68l7.47-3.09-.26-.64c-.49-1.33-2-3.16-5-3.16-2.99 0-5.49 2.36-5.49 5.83 0 3.26 2.47 5.83 5.8 5.83 2.69 0 4.25-1.66 4.9-2.62l-2-.133c-.67.98-1.58 1.53-2.69 1.53zm-.18-6.38c.99 0 1.83.5 2.12 1.23l-5.11 2.12c0-2.33 1.63-3.35 2.99-3.35z"/>
+            </svg>
+            <button type="button" @click="closeGoogleChooser()" class="p-1 text-muted hover:text-ink rounded-full">
+              <i class="ph-bold ph-x text-lg"></i>
             </button>
+          </div>
+          <h3 class="text-xl font-bold leading-tight m-0">Sign in with Google</h3>
+          <p class="text-xs text-muted mt-1 leading-normal">Choose an account to sign in directly to CampusFix:</p>
+        </div>
+
+        <div class="py-2 max-h-80 overflow-y-auto">
+          <template x-for="acc in googleAccounts" :key="acc.email">
+            <div class="google-account-item" @click="selectGoogleAccount(acc)">
+              <template x-if="acc.avatar">
+                <img :src="acc.avatar" :alt="acc.name" class="google-avatar">
+              </template>
+              <template x-if="!acc.avatar">
+                <div class="google-avatar-placeholder" :style="`background-color: ${acc.bg || '#4285F4'}`" x-text="acc.initial || acc.name.charAt(0)"></div>
+              </template>
+              <div class="flex-grow min-w-0">
+                <div class="font-semibold text-sm leading-snug truncate" x-text="acc.name"></div>
+                <div class="text-xs text-muted truncate" x-text="acc.email"></div>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-accent-soft text-accent" x-text="acc.badge || 'Google'"></span>
+            </div>
+          </template>
+
+          <!-- Use another account input -->
+          <div class="google-account-item" @click="showCustomGoogleInput = !showCustomGoogleInput">
+            <div class="w-10 h-10 rounded-full bg-bg border border-border flex items-center justify-center text-muted">
+              <i class="ph-bold ph-user-plus text-lg text-accent"></i>
+            </div>
+            <div class="flex-grow">
+              <div class="font-semibold text-sm leading-snug">Use another account</div>
+              <div class="text-xs text-muted">Sign in with any other Google account</div>
+            </div>
+          </div>
+
+          <div x-show="showCustomGoogleInput" class="p-4 bg-bg border-t border-border" style="display:none;">
+            <div class="flex gap-2">
+              <input type="email" x-model="customGoogleEmail" class="form-input text-xs" placeholder="yourname@gmail.com" @keydown.enter.prevent="submitCustomGoogleAccount()">
+              <button type="button" @click="submitCustomGoogleAccount()" class="btn btn-primary text-xs py-2 px-3 whitespace-nowrap">
+                Sign In
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
+
   </div>
 
   <!-- Interactive Background Canvas Script for Cyber Particles -->
@@ -282,7 +282,6 @@
       function render() {
         ctx.clearRect(0, 0, width, height);
         
-        // Draw cyber particles & connecting lines
         for (let i = 0; i < particles.length; i++) {
           let p = particles[i];
           p.x += p.vx;
@@ -295,7 +294,7 @@
 
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fillStyle = gba(0, 229, 255, );
+          ctx.fillStyle = `rgba(0, 229, 255, ${p.alpha})`;
           ctx.shadowBlur = 10;
           ctx.shadowColor = '#00e5ff';
           ctx.fill();
@@ -307,7 +306,7 @@
               ctx.beginPath();
               ctx.moveTo(p.x, p.y);
               ctx.lineTo(p2.x, p2.y);
-              ctx.strokeStyle = gba(0, 150, 255, );
+              ctx.strokeStyle = `rgba(0, 150, 255, ${0.18 * (1 - dist / 110)})`;
               ctx.lineWidth = 0.8;
               ctx.stroke();
             }

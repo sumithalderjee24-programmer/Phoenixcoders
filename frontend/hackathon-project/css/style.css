@@ -3068,3 +3068,25 @@ h1, h2, h3, h4,
 .cyber-btn-back:hover {
   color: #00d2ff;
 }
+
+
+/* Inbox Verification Notice Box */
+.cyber-inbox-tip {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: rgba(0, 210, 255, 0.1);
+  border: 1px solid rgba(0, 210, 255, 0.3);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  color: #70e1ff;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  margin: 0.25rem 0 0.75rem 0;
+}
+
+.cyber-inbox-tip i {
+  font-size: 1.25rem;
+  color: #00e5ff;
+  flex-shrink: 0;
+}
